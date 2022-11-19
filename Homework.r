@@ -33,6 +33,10 @@ points(1:10, dgeom(1:10, prob = 0) , add = T , lwd = 3)
 
 curve(dbeta(x,10,10))
 
+n <- c(100, 1000)
+eps <- c(.1, .001)
+M <- 5:50
+
 
 
 
