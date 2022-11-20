@@ -139,35 +139,49 @@ points(t_seq, p_hat[t_seq], pch = 24,
 
 #It WORKSS, Daje matte!! 
 
-
-#A possible solution: A maximum win of L
+#No casinos would accept to play this game, having the risk of infinitis loss,a possible solution force the game to finish with a maximum win of L after the L-esimo trials.
 
 L = 8
-
 stop_simulation[stop_simulation>7] = L
+#Considering the fact of the maximum revenue fixed to    L = 8 in the simultation study it result a "fair" amount to pay as
+mean(stop_simulation)
 tab = proportions(table(stop_simulation))
-
-
-
 library(ggplot2)
-
 # Create Data
 data=data.frame(tab)
-
-
-
 ggplot(data, aes(x=stop_simulation, y=Freq,fill=stop_simulation))+
   geom_bar(stat="identity") +
-  scale_fill_manual(values=c(2,2,2,2,2,2,2,2,"darkgoldenrod2"))+
   theme_minimal() +
+  geom_bar(stat="identity", fill="steelblue")+
   xlab("stop time") + ylab("Frequencies") +  guides(fill="none") +
   ggtitle("Barplot of stopping time" ) + 
   scale_y_continuous(labels=scales::percent)  
 
+#Remark:50% of the time the stopping time is equal to 0 and no payoff for the player.
+# The percentege of the time when the game is stopped is
+data$Freq[data$stop_simulation == 8]
+
+# Let's have a look further
+# Consider a enter cost c greter than the mean ( casinos are unfair!) now eh can have a look at the revenue function.
+c <- 2 #cost i order to enter the game
+
+costs <- rep(c , M)
+
+revenue_f<- cumsum(costs - stop_simulation)
+i <- seq(from = 0 , to = length(revenue_f), by = step_size)
+rev = revenue_f[i]
+length(rev)
+
+plot(rev,,type = 'l',main = "Revenue function",
+     lwd = 2,
+     col = "cyan4",
+     ylab = expression(p[T]),
+     xlab = "t",
+     sub = paste("Simulation size:", M))
+grid()
 
 
-#we can see that 50% of the time the stopping time is equal to 0(more comments). Considering the fact of the maximum revenue fixed to L = 8 in the simultation study it result a "fair" amount to pay as
-mean(tab)
+
 
 
 
