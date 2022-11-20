@@ -116,7 +116,7 @@ points(t_seq, p_hat[t_seq], pch = 24,
 #Thinking as before but more treaky in the code ( as Matteo said)
 
 M <- 10000             # simulation size
-t_data <- rep(NA, M)   # # pre-allocation the data structure (simple vector)
+   # # pre-allocation the data structure (simple vector)
 
 stop_simulation <-rgeom(n = M, prob = runif(n = M))
 
@@ -137,13 +137,37 @@ points(t_seq, p_hat[t_seq], pch = 24,
        col = "black", bg = "yellow", cex = .7)
 
 
-#It WORKSS, Daje matte!!
+#It WORKSS, Daje matte!! 
+
+
+#A possible solution: A maximum win of L
+
+L = 8
+
+stop_simulation[stop_simulation>7] = L
+tab = proportions(table(stop_simulation))
 
 
 
+library(ggplot2)
+
+# Create Data
+data=data.frame(tab)
 
 
 
+ggplot(data, aes(x=stop_simulation, y=Freq,fill=stop_simulation))+
+  geom_bar(stat="identity") +
+  scale_fill_manual(values=c(2,2,2,2,2,2,2,2,"darkgoldenrod2"))+
+  theme_minimal() +
+  xlab("stop time") + ylab("Frequencies") +  guides(fill="none") +
+  ggtitle("Barplot of stopping time" ) + 
+  scale_y_continuous(labels=scales::percent)  
+
+
+
+#we can see that 50% of the time the stopping time is equal to 0(more comments). Considering the fact of the maximum revenue fixed to L = 8 in the simultation study it result a "fair" amount to pay as
+mean(tab)
 
 
 
