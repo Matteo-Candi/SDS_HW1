@@ -4,9 +4,9 @@
 rm(list=ls())
 
 # Exercise 1 Stopping time   ----------------------------- 
-######### Brutti's code############################
-M <- 1000             # simulation size
-t_data <- rep(NA, M)   # pre-alloc the data structure (simple vector)
+######### First code############################
+M <- 10000             # simulation size
+t_data <- rep(NA, M)   # pre-allocation the data structure (simple vector)
 for (m in 1:M){
   x <- runif(1)    # sampling the threshold value
   y <- runif(1)    # first process value
@@ -56,22 +56,88 @@ for (i in ave_step){
 
 
 plot(ave_vec , main = "Average stopping time",
-     xlab = "step", ylam = "Averege stopping time",
+     xlab = "step", ylab = "Averege stopping time",
      sub = "Simulation study", col = "steelblue" , type = "l" , lwd =3)
 grid()
 
 #Comments:
 
-#Supponiamo di  dover pagare una cifra c per giocare a questo gioco e si vincono tot euro quanto è il tempo di attesa.Ci si può chiedere qual'è la cifra "giusta" per partecipare a questo gioco.
+#Suppose we have to pay c euros to start this experiment and we win as many dollars as the waiting time.
+#The question we want to answer is: What is the "fair" amount in order to play this game. 
 
-#In media ci si aspetta di vincere una somma infinita da questo gioco,quindi, in accordo con la teoria tradizionale del valore atteso,ci si può permettere di pagare qualunque cifra c per partecipare. Infatti anche pagando un miliardo per volta, alla lunga, dovrà capitare la volta (con probabilità invero bassissima) di una vincita così strepitosa da ripagare abbondantemente tutte le altre quote investite per ottenere vincite insignificanti.In pratica però, nessuna persona ragionevole è disposta a pagare più di qualche unità per partecipare a questo gioco. Il rifiuto intuitivo a investire cifre importanti nel gioco è ben sostenuto dalla simulazione descritta nel grafico seguente. Ripetendo 10000 volte la serie si ottengono all'inizio vincite mediamente basse (qualche unità). Successivamente la media si alza, in corrispondenza di qualche serie fortunata, per poi diminuire leggermente fino al prossimo colpo fortunato. L'andamento complessivo è senza dubbio crescente, e tenderà matematicamente all'infinito dopo una serie infinita di giocate ma, nelle 10.000 giocate della simulazione, la media delle vincite è arrivata appena al valore di 6.
-
-
-#Dal punto di vista matematico, non sorgono difficoltà dalla situazione prospettata nel gioco.In altre parole, è perfettamente coerente accettare la possibilità (infinitesima) di una vincita infinita, tale da bilanciare qualunque somma pagata nelle (infinite) volte in cui la vincita risulta insignificante.
-
-#Possibile soluzione, vincita massima fissata a L:
+#On average you expect to win an infinite amount from this game, so according to traditional expected value theory, you can afford to pay any amount c to play.
 
 
+#In fact, reapeating this experiment many time, it will have to happen (with very low probability)  to win so much, enough for paying all the expenses incurred before.
+
+#In practice though, no reasonable person is willing to pay a lot of money to play this game. The intuitive refusal to invest large sums in the game is well supported by the simulation described in the following graph. By repeating the series 10,000 times, on average low winnings are obtained at the beginning (a few units). Subsequently the average rises, corresponding to some lucky series, and then decreases slightly until the next lucky hit. The overall trend is undoubtedly growing, and will mathematically tend to infinity after an infinite series of plays but, in the 10,000 plays of the simulation, the average of the winnings has just reached the value of 10.
+
+#From the statistical point of view, no difficulties came from the situation presented in the game. In other words, it is perfectly coherent to accept the  possibility of an infinite win, such as to balance any amount paid in the (infinite) times the win is insignificant.
+
+
+#Conclusion:
+# Ultimately, the decision to play or not to play this game  must depend on each individual's risk, itself dependent on many parameters, such as initial revenue or the amount you are willing to lose.
+
+#If the earnings here are "on average" infinite, you must also have infinite funds and play an infinite number of times to be eligible for certain earnings.
+
+#############Second way (hopefully faster)############
+
+#The main idea is to simulate a uniform(0,1) that will be the probbability's parameter of the geometric distibution. Basically we are doing a mixture model T ~ Geom(u) where U ~ Unif(0,1)
+
+
+M <- 10000             # simulation size
+t_data <- rep(NA, M)   # # pre-allocation the data structure (simple vector)
+
+for(m in 1:M){
+  u <- runif(n = 1)
+  t_data[m] <- rgeom(n = 1, prob = u)
+}
+
+#RE-plotting the true distribution
+plot(t_seq, pT(t_seq), 
+     type = "h",
+     lwd = 4,
+     col = "cyan4",
+     ylab = expression(p[T]),
+     xlab = "t",
+     main = "Marginal of the Stopping Time",
+     sub = paste("Simulation size:", M))
+
+
+p_hat <- proportions( table( t_data ) )
+points(t_seq, p_hat[t_seq], pch = 24, 
+       col = "black", bg = "yellow", cex = .7)
+
+# It works daje, for sure faster !!!
+
+
+#############Third way (hopefully faster)############
+
+#Thinking as before but more treaky in the code ( as Matteo said)
+
+M <- 10000             # simulation size
+t_data <- rep(NA, M)   # # pre-allocation the data structure (simple vector)
+
+stop_simulation <-rgeom(n = M, prob = runif(n = M))
+
+p_hat <- proportions( table( stop_simulation ) )
+
+#RE-RE-plotting the true distribution
+
+plot(t_seq, pT(t_seq), 
+     type = "h",
+     lwd = 4,
+     col = "cyan4",
+     ylab = expression(p[T]),
+     xlab = "t",
+     main = "Marginal of the Stopping Time",
+     sub = paste("Simulation size:", M))
+
+points(t_seq, p_hat[t_seq], pch = 24, 
+       col = "black", bg = "yellow", cex = .7)
+
+
+#It WORKSS, Daje matte!!
 
 
 
