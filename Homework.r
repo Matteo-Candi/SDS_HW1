@@ -1,7 +1,4 @@
 
-# Homework 1 of Statistcs for Data Science
-# Accademic year: 2022/2023
-# Authors: Barba Paolo, Candi Matteo
 rm(list=ls())
 
 # Exercise 1 Stopping time   ----------------------------- 
