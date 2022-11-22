@@ -13,12 +13,17 @@
 Sim <- c(100, 1000, 10000, 100000, 1000000, 10000000)
 
 fin <- c()
-for (s in Sim){
+
+f = function(s){
   beg <- Sys.time()  
-  stop_simulations <-  rgeom(n = M, prob = runif(n = M))
+  stop_simulations <- rgeom(n = s, prob = runif(n = s))
   fin <- c(fin , Sys.time() - beg)
-  
-} 
+  return(fin)
+}
+
+?sapply
+reuslts <- sapply( Sim , f )
+reuslts
 
 tab_time <- data.frame (Simulation_size  = c("100", "1000", "10000", "100000", "1000000", "10000000") ,
             Computational_time = fin
