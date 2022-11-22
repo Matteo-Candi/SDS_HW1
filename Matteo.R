@@ -1,45 +1,73 @@
 rm(list=ls())
 
-
+# Setting parameters
 n <- 1000
-m <- 40
+m <- 10
 h <- 1/m
 eps <- .001
 
+# Generating the random sample from the beta
 X <- rbeta(n, 10, 10)
 
-
+# Setting number of bins
 bins <- seq(0, 1, h)
-re <- cut(X, bins, include.lowest = T)
-pj_hat <- table(re) / n
 
+# Rename units with the bins they belong
+intervals <- cut(X, bins, include.lowest = T)
+
+# Finding the frequencies of units inside each bins
+pj_hat <- table(intervals) / n
+
+# Computing high of each bin dividing the frequencies for the width of the bin
 p_hat <- as.vector(pj_hat / h)
+p_hat
 
 
 
-# histo <- hist(X, freq = F, breaks = c(bins))
-# box()
-# 
-# # p_hat == histo$density
 
-
-
+# Importing packages to use Laplace function
 library(VGAM)
 
+# Generating m values from a Laplacian: one for each bin
 nu <- rlaplace(m, 0, 8/eps^2)
-Dj <- table(re) + nu
+nu
 
+# Adding nu to every absolute frequencies of each bin
+Dj <- table(intervals) + nu
+
+# Finding qj_hat dividing max(0, Dj) for the sum of Dj
 qj_hat <- c()
 for(d in Dj){
   qj_hat <- c(qj_hat, max(d,0) / sum(Dj))
 }
 
+# Computing the high of the histogram dividing by the width of the columns
 q_hat <- qj_hat / h
 
 
 
-
-plot(p_hat, col='red', pch=16, xaxt='n')
+# Plotting p_hat and q_hat
+plot(p_hat, col='red', pch=16, xaxt='n', ylab = 'Density', xlab = 'Bins', main='Plot of p_hat and q_hat')
 axis(1, at = 0:m, lab=bins)
-points(q_hat, col='blue', pch=16)
+points(q_hat, col = 'blue', pch = 16)
+
+
+
+# Plotting
+plot(seq(h,1,h), p_hat, xlim=c(0,1), ylim=c(0, 4), 'n', ylab = 'Density', xlab = 'Bins', main='Plot of p_hat and q_hat')
+legend('topright', legend=c('p_hat', 'q_hat', 'Beta(10,10)'), col = c('red', 'blue', 'green'), lwd=3, lty=1)
+
+curve(dbeta(x, 10,10), col='green', lwd = 3, add = T)
+
+p <- 0
+for(i in 1:m){
+  segments(p ,p_hat[i], p + h, p_hat[i], col = 'red', lwd = 3)
+  segments(p + h, p_hat[i], p + h, p_hat[i+1], col='red', lty=3, lwd=3)
+  p <- p + h}
+
+q <- 0
+for(i in 1:m){
+  segments(q ,q_hat[i], q +h, q_hat[i], col = 'blue', lwd = 3)
+  segments(q + h, q_hat[i], q + h, q_hat[i+1], col='blue', lty=3, lwd=3)
+  q <- q + h}
 
