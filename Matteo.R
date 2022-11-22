@@ -1,4 +1,6 @@
+
 rm(list=ls())
+<<<<<<< HEAD
 
 # Setting parameters
 n <- 1000
@@ -10,6 +12,24 @@ eps <- .001
 X <- rbeta(n, 10, 10)
 
 # Setting number of bins
+=======
+n <- 1000  #
+m <- 40    #
+h <- 1/m
+eps <- .001
+
+
+
+
+X <- rbeta(n, 10, 10)
+
+c
+hist(X , breaks = 5 , freq =  F)
+
+
+
+
+>>>>>>> 61f12e34efe7b95fa7226a6e478756cc7f44095a
 bins <- seq(0, 1, h)
 
 # Rename units with the bins they belong
