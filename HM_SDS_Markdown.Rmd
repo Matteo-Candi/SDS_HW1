@@ -30,6 +30,7 @@ for (s in Sim){
 
 tab_time <- data.frame (Simulation_size  = c("100", "1000", "10000", "100000", "1000000", "10000000") , Computational_time = fin )   # creating the dataframe of the results
 tab_time
+paste("The median speed over M is : " , median(fin))
 
 ```
 
