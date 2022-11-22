@@ -1,12 +1,19 @@
+
 rm(list=ls())
-
-
-n <- 1000
-m <- 40
+n <- 1000  #
+m <- 40    #
 h <- 1/m
 eps <- .001
 
+
+
+
 X <- rbeta(n, 10, 10)
+
+c
+hist(X , breaks = 5 , freq =  F)
+
+
 
 
 bins <- seq(0, 1, h)

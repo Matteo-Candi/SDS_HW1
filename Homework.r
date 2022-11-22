@@ -1,10 +1,8 @@
-<<<<<<< HEAD
+
 # Homework 1 of Statistcs for Data Science
 # Accademic year: 2022/2023
 # Authors: Barba Paolo, Candi Matteo
 
-de61e67e83316227c3db1d5163a76a15f4e893ea
-rm(list=ls())
 
 
 #############by now the fastest way############
@@ -29,7 +27,7 @@ tab_time
 
 
 
-M <- M             # simulation size
+M <-             # simulation size
 # # pre-allocation the data structure (simple vector)
 
 stop_simulation <-rgeom(n = M, prob = runif(n = M))
@@ -55,6 +53,11 @@ plot(t_seq, pT(t_seq),
 points(t_seq, p_hat[t_seq], pch = 24, 
        col = "black", bg = "yellow", cex = .7)
 
+pT(t_seq) - p[t_seq]
+
+
+
+
 legend("topright", legend = c("True model" , "simulation result"),
        col = c("cyan4","yellow"),lty=c(1,NA),pch=c(NA,24), cex=0.7,
        box.lty=0)
@@ -63,6 +66,7 @@ legend("topright", legend = c("True model" , "simulation result"),
 step_size = 10
 ave_step  = seq(1, length(stop_simulation), step_size)
 ave_vec = rep(NA, length(ave_step))
+?matrix
 
 t <- 0
 for (i in ave_step){
@@ -144,12 +148,30 @@ grid()
 ################
 
 
+# Exercise 2 --------------------------------------------------------------
+#2.1
+
+rm(list=ls())
+?dbeta
+beta_fun <- function(x,alpha,beta){
+  return (dbeta(x = xx , shape1 = alpha ,shape2= beta))
+}
 
 
 
+?matrix
+Sim <- c(100, 1000, 10000, 100000, 1000000, 10000000)  # vector of the size 
+diff <- matrix(NA , nrow = 6, ncol = 25  )       # inizialize the the vector of the result
+i <- 1
+for (s in Sim){
+  stop_simulations <-  rgeom(n = s, prob = runif(n = s))   # run the simulation
+  p_hat <- proportions(table(stop_simulations))
 
+  diff[i,] <- pT(t_seq) - p_hat[t_seq]
+  diff
+  i <- i +1
 
+}
 
-
-
+#tab_summary = 
 

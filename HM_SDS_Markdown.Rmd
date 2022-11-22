@@ -103,7 +103,22 @@ grid()}
 
 
 ## Computational Analysis:
-[TODO]
+
+In this section we would quantitatively check how the simulation size impacts the approximation, in order to show that, we are going to compute the distances between the true distribution and the estimated distibution.
+
+```{r simualtion analysis}
+Sim <- c(100, 1000, 10000, 100000, 1000000, 10000000)  # vector of the size 
+diff <- matrix(NA , 6 )       # inizialize the the vector of the result
+
+for (s in Sim){
+  stop_simulations <-  rgeom(n = s, prob = runif(n = s))   # run the simulation
+  p_hat <- proportions(table(stop_simulations))
+  i=1
+  diff[i] <- pT(t_seq) - p_hat[t_seq]
+  i <- i +1
+}
+
+```
 
 ## Statistical Analysis
 
