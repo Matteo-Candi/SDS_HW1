@@ -1,33 +1,45 @@
-
 # Homework 1 of Statistcs for Data Science
 # Accademic year: 2022/2023
 # Authors: Barba Paolo, Candi Matteo
 rm(list=ls())
 
-# Exercise 1 Stopping time   ----------------------------- 
-######### First code############################
-M <- 10000             # simulation size
-t_data <- rep(NA, M)   # pre-allocation the data structure (simple vector)
-for (m in 1:M){
-  x <- runif(1)    # sampling the threshold value
-  y <- runif(1)    # first process value
-  t <- 1
-  while (y > x) {
-    t <- t + 1
-    y <- runif(1)  # no memory
-  }
-  t_data[m] <- t   # save
-}
-p_hat <- proportions( table( t_data ) )
+
+#############by now the fastest way############
+
+#The idea is to use a mixture model, so we generate m Unif(0,1) and then use them as a parameters of the geometric distributions 
+#Thinking as before but more treaky in the code ( as Matteo said)
+
+Sim <- c(100, 1000, 10000, 100000, 1000000, 10000000)
+
+fin <- c()
+for (s in Sim){
+  beg <- Sys.time()  
+  stop_simulations <-  rgeom(n = M, prob = runif(n = M))
+  fin <- c(fin , Sys.time() - beg)
+  
+} 
+
+tab_time <- data.frame (Simulation_size  = c("100", "1000", "10000", "100000", "1000000", "10000000") ,
+            Computational_time = fin
+)
+tab_time
 
 
-# True marginal PMF of T
+
+M <- M             # simulation size
+# # pre-allocation the data structure (simple vector)
+
+stop_simulation <-rgeom(n = M, prob = runif(n = M))
+
+p_hat <- proportions( table( stop_simulation ))
+
+#RE-RE-plotting the true distribution
 pT <- function(t)  1/(t*(t+1))
 
 # Plot it zooming in between t = 1 and t = 25
 t_seq <- 1:25
 
-# True PMF of T
+
 plot(t_seq, pT(t_seq), 
      type = "h",
      lwd = 4,
@@ -37,22 +49,22 @@ plot(t_seq, pT(t_seq),
      main = "Marginal of the Stopping Time",
      sub = paste("Simulation size:", M))
 
-points(t_seq, pT(t_seq), pch = 21, 
-       col = "black", bg = "darkgoldenrod2", cex = 1.5)
-
-# Simulative approximation to the PMF of T
 points(t_seq, p_hat[t_seq], pch = 24, 
        col = "black", bg = "yellow", cex = .7)
 
+legend("topright", legend = c("True model" , "simulation result"),
+       col = c("cyan4","yellow"),lty=c(1,NA),pch=c(NA,24), cex=0.7,
+       box.lty=0)
+
 
 step_size = 10
-ave_step  = seq(1, length(t_data), step_size)
+ave_step  = seq(1, length(stop_simulation), step_size)
 ave_vec = rep(NA, length(ave_step))
 
 t <- 0
 for (i in ave_step){
   t <- t + 1
-  ave_vec[t] = mean( t_data[1:i] )
+  ave_vec[t] = mean( stop_simulation[1:i] )
 }
 
 
@@ -60,13 +72,19 @@ plot(ave_vec , main = "Average stopping time",
      xlab = "step", ylab = "Averege stopping time",
      sub = "Simulation study", col = "steelblue" , type = "l" , lwd =3)
 grid()
+#It WORKSS, Daje matte!! 
 
-#Comments:
+#Analyis:
 
-#Suppose we have to pay c euros to start this experiment and we win as many dollars as the waiting time.
-#The question we want to answer is: What is the "fair" amount in order to play this game. 
+#Suppose we are a Casino and we want to introduce this experiment in our available games. The costumers have to pay an amount of C euros to start this game and he win as many euros as the waiting time.
 
-#On average you expect to win an infinite amount from this game, so according to traditional expected value theory, you can afford to pay any amount c to play.
+#The question we are interested to answer is: 
+#What is the "fair" amount oumnto in order to play this game?.
+
+#To answer the question, we need to compute the expected value of this random variable. How much you pay to enter the game is the expected value of the random variable.
+
+
+#On average you expect to win an infinite amount from this game, so according to traditional expected value theory, you can afford to pay any amount C to play.The mathematical result provides as a solution that it is convenient to pay any amount of money to play this game.
 
 
 #In fact, reapeating this experiment many time, it will have to happen (with very low probability)  to win so much, enough for paying all the expenses incurred before.
@@ -81,70 +99,10 @@ grid()
 
 #If the earnings here are "on average" infinite, you must also have infinite funds and play an infinite number of times to be eligible for certain earnings.
 
-#############Second way (hopefully faster)############
-
-#The main idea is to simulate a uniform(0,1) that will be the probbability's parameter of the geometric distibution. Basically we are doing a mixture model T ~ Geom(u) where U ~ Unif(0,1)
-
-
-M <- 10000             # simulation size
-t_data <- rep(NA, M)   # # pre-allocation the data structure (simple vector)
-
-for(m in 1:M){
-  u <- runif(n = 1)
-  t_data[m] <- rgeom(n = 1, prob = u)
-}
-
-#RE-plotting the true distribution
-plot(t_seq, pT(t_seq), 
-     type = "h",
-     lwd = 4,
-     col = "cyan4",
-     ylab = expression(p[T]),
-     xlab = "t",
-     main = "Marginal of the Stopping Time",
-     sub = paste("Simulation size:", M))
-
-
-p_hat <- proportions( table( t_data ) )
-points(t_seq, p_hat[t_seq], pch = 24, 
-       col = "black", bg = "yellow", cex = .7)
-
-# It works daje, for sure faster !!!
-
-
-#############Third way (hopefully faster)############
-
-#Thinking as before but more treaky in the code ( as Matteo said)
-
-M <- 10000             # simulation size
-# # pre-allocation the data structure (simple vector)
-
-stop_simulation <-rgeom(n = M, prob = runif(n = M))
-
-p_hat <- proportions( table( stop_simulation ) )
-
-#RE-RE-plotting the true distribution
-
-plot(t_seq, pT(t_seq), 
-     type = "h",
-     lwd = 4,
-     col = "cyan4",
-     ylab = expression(p[T]),
-     xlab = "t",
-     main = "Marginal of the Stopping Time",
-     sub = paste("Simulation size:", M))
-
-points(t_seq, p_hat[t_seq], pch = 24, 
-       col = "black", bg = "yellow", cex = .7)
-
-
-#It WORKSS, Daje matte!! 
-
-#No casinos would accept to play this game, having the risk of infinitis loss,a possible solution force the game to finish with a maximum win of L after the L-esimo trials.
+#No casinos would introduce  this game, having the risk of infinitis loss. A possible solution is to force the game to finish with a maximum win of L after the L-esimo trials.
 
 L = 8
 stop_simulation[stop_simulation>7] = L
-#Considering the fact of the maximum revenue fixed to    L = 8 in the simultation study it result a "fair" amount to pay as
 mean(stop_simulation)
 tab = proportions(table(stop_simulation))
 library(ggplot2)
@@ -162,16 +120,16 @@ ggplot(data, aes(x=stop_simulation, y=Freq,fill=stop_simulation))+
 # The percentege of the time when the game is stopped is
 data$Freq[data$stop_simulation == 8]
 
-# Let's have a look further
-# Consider a enter cost c greter than the mean ( casinos are unfair!) now eh can have a look at the revenue function.
-c <- 2 #cost i order to enter the game
+# Let's go further
+# Consider a enter cost C greater than the mean ( casinos are unfair!) now we can have a look at the revenue function.
 
-costs <- rep(c , M)
+C <- 2 #cost i order to enter the game
 
+costs <- rep(C , M)
 revenue_f<- cumsum(costs - stop_simulation)
 i <- seq(from = 0 , to = length(revenue_f), by = step_size)
 rev = revenue_f[i]
-length(rev)
+
 
 plot(rev,,type = 'l',main = "Revenue function",
      lwd = 2,
@@ -180,7 +138,7 @@ plot(rev,,type = 'l',main = "Revenue function",
      xlab = "t",
      sub = paste("Simulation size:", M))
 grid()
-
+################
 
 
 

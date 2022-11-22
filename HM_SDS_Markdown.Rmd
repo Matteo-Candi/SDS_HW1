@@ -1,0 +1,204 @@
+---
+title: "Homework 1 of Statistical of Data Science"
+author: "Barba Paolo, Candi Matteo"
+date: ''
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exercise 1 Stopping Time
+
+### Process:
+Suppose that $X ∼ Unif(0, 1)$, and suppose we independently draw ${Y_{1}, Y_{2}, Y_{3}, \dots}$ from yet another $Unif(0, 1)$ model
+until we reach the random stopping time T such that $(Y_{T} < X)$.
+
+### Simulation study:
+The idea is to use a mixture model, we generate m Unif(0,1) and then use them as a parameters of the geometric distributions.
+We run  a simulation with size:
+M = { 100, 1000, 10000, 100000, 1000000, 10000000}
+
+```{r simualtion  time}
+Sim <- c(100, 1000, 10000, 100000, 1000000, 10000000)  # vector of the size 
+fin <- c()              # inizialize the the vector of the result
+for (s in Sim){
+  beg <- Sys.time()     # starting time
+  stop_simulations <-  rgeom(n = s, prob = runif(n = s))   # run the simulation
+  fin <- c(fin , Sys.time() - beg)}   # ending time
+
+tab_time <- data.frame (Simulation_size  = c("100", "1000", "10000", "100000", "1000000", "10000000") , Computational_time = fin )   # creating the dataframe of the results
+tab_time
+
+```
+
+Now we can start the anyalisis with a fixed M size equal to 100000
+```{r simualtion}
+M <-  100000               # simulation size
+beg <- Sys.time()         # start time
+stop_simulation <-rgeom(n = M, prob = runif(n = M))     #runninng the simulation 
+fin <- Sys.time() - beg   # end time
+p_hat <- proportions( table( stop_simulation ))
+
+```
+
+## Comparison with the true model
+
+First we compute the true function:
+
+$$ Pr(T = t) = \frac{1}{t(t+1)}$$ for t $∈${1,2,3,...}
+
+
+```{r true function}
+pT <- function(t)  1/(t*(t+1))  
+t_seq <- 1:25      #Plot it zooming between t = 1 and t = 25
+```
+
+
+```{r plots}
+
+{plot(t_seq, pT(t_seq), 
+     type = "h",
+     lwd = 4,
+     col = "cyan4",
+     ylab = expression(p[T]),
+     xlab = "t",
+     main = "Marginal of the Stopping Time",
+     sub = paste("Simulation size:", M))
+
+points(t_seq, p_hat[t_seq], pch = 24, 
+       col = "black", bg = "yellow", cex = .7 )
+
+legend("topright", legend = c("True model" , "simulation result"),
+       col = c("cyan4","yellow"),lty=c(1,NA),pch=c(NA,24), cex=0.7,
+       box.lty=0)
+grid()}
+```
+
+
+Now we can have a look at the series of the averages.
+```{r Average}
+step_size = 10    #set a step size
+ave_step  = seq(1, length(stop_simulation), step_size)  #start the sequence
+ave_vec = rep(NA, length(ave_step))                     #pre-allocating the vector
+
+# Compute the simulations averages
+t <- 0
+for (i in ave_step){
+  t <- t + 1
+  ave_vec[t] = mean( stop_simulation[1:i] )
+}
+
+
+```
+
+```{r average}
+{plot(ave_vec , main = "Average stopping time",
+     xlab = "step", ylab = "Averege stopping time",
+     sub = "Simulation study", col = "steelblue" , type = "l" , lwd =3)
+grid()}
+```
+
+
+## Computational Analysis:
+[TODO]
+
+## Statistical Analysis
+
+Suppose we are a Casino and we want to introduce this experiment in our available games. The costumers have to pay an amount of C euros to start this game and he win as many euros as the waiting time.
+
+The question we are interested to answer is: 
+What is the "fair" amount oumnto in order to play this game?.
+
+To answer the question, we need to compute the expected value of this random variable. How much you pay to enter the game is the expected value of the random variable.
+
+
+On average you expect to win an infinite amount from this game, so according to traditional expected value theory, you can afford to pay any amount C to play.The mathematical result provides as a solution that it is convenient to pay any amount of money to play this game.
+
+
+In fact, reapeating this experiment many time, it will have to happen (with very low probability)  to win so much, enough for paying all the expenses incurred before.
+
+In practice though, no reasonable person is willing to pay a lot of money to play this game. The intuitive refusal to invest large sums in the game is well supported by the simulation described in the following graph. By repeating the series 10,000 times, on average low winnings are obtained at the beginning (a few units). Subsequently the average rises, corresponding to some lucky series, and then decreases slightly until the next lucky hit. The overall trend is undoubtedly growing, and will mathematically tend to infinity after an infinite series of plays but, in the 10,000 plays of the simulation, the average of the winnings has just reached the value of 10.
+
+From the statistical point of view, no difficulties came from the situation presented in the game. In other words, it is perfectly coherent to accept the  possibility of an infinite win, such as to balance any amount paid in the (infinite) times the win is insignificant.
+
+
+### Conclusion:
+ Ultimately, the decision to play or not to play this game  must depend on each individual's risk, itself dependent on many parameters, such as initial revenue or the amount you are willing to lose.
+
+If the earnings here are "on average" infinite, you must also have infinite funds and play an infinite number of times to be eligible for certain earnings.
+
+No casinos would introduce  this game, having the risk of infinitis loss. A possible solution is to force the game to finish with a maximum win of L after the L-esimo trials.
+
+
+### Comments and further analysis:
+
+No casinos would introduce this game, having the risk of infinite loss. A possible solution is to force the game to finish with a maximum win of L after the L-th trials.
+
+Considering the fact of the maximum revenue fixed to L = 8 in the simulation study it results that a "fair" amount to pay is :
+
+```{r fixed amount}
+L = 8    # max amount it can be won
+stop_simulation_copy <- stop_simulation
+stop_simulation_copy[stop_simulation_copy>7] <- L  # set all the observation greater than 7 to L
+print(mean(stop_simulation_copy))
+```
+
+```{r atoher plot}
+tab = proportions(table(stop_simulation_copy))
+library(ggplot2)
+# Create Data
+data=data.frame(tab)
+ggplot(data, aes(x=stop_simulation_copy, y=Freq,fill=stop_simulation_copy))+
+  geom_bar(stat="identity") +
+  theme_minimal() +
+  geom_bar(stat="identity", fill="steelblue")+
+  xlab("stop time") + ylab("Frequencies") +  guides(fill="none") +
+  ggtitle("Barplot of stopping time" ) + 
+  scale_y_continuous(labels=scales::percent)  
+
+```
+
+Remark:
+50% of the time the stopping time is equal to 0 and no payoff for the player.
+The percentege of the time when the game is stopped is
+```{r percentage}
+print(data$Freq[data$stop_simulation_copy == 8])
+```
+
+
+Let's go a little bit further,
+Consider a enter cost C greater than the mean ( casinos are unfair!) now we can have a look at the revenue function (enter cost - stopping time ).
+
+```{r revenue}
+par(mfrow = c(1,2))
+C <- 2 #cost i order to enter the game
+costs <- rep(C , M)
+revenue_f<- cumsum(costs - stop_simulation_copy)
+i <- seq(from = 0 , to = length(revenue_f), by = step_size)
+rev <- revenue_f[i]
+{plot(rev,type = 'l',main = "Revenue function set up \n where the game is force to end",
+     lwd = 2,
+     col = "cyan4",
+     ylab = expression(R[t]),
+     xlab = "t",
+     sub = paste("Simulation size:", M))
+grid()}
+
+revenue_f<- cumsum(costs - stop_simulation)
+rev <- revenue_f[i]
+{plot(rev,type = 'l',main = "Revenue function \n  normal set up ",
+     lwd = 2,
+     col = "cyan4",
+     ylab = expression(R[t]),
+     xlab = "t",
+     sub = paste("Simulation size:", M))
+grid() 
+}
+
+
+
+
+
+```
