@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 # Homework 1 of Statistcs for Data Science
 # Accademic year: 2022/2023
 # Authors: Barba Paolo, Candi Matteo
+=======
+
+>>>>>>> de61e67e83316227c3db1d5163a76a15f4e893ea
 rm(list=ls())
 
 
