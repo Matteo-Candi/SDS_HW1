@@ -22,15 +22,19 @@ M = { 100, 1000, 10000, 100000, 1000000, 10000000}
 
 ```{r simualtion  time}
 Sim <- c(100, 1000, 10000, 100000, 1000000, 10000000)  # vector of the size 
-fin <- c()              # inizialize the the vector of the result
-for (s in Sim){
+fin <- c()    # inizialize the the vector of the result
+timing_fun <- function(s){
   beg <- Sys.time()     # starting time
   stop_simulations <-  rgeom(n = s, prob = runif(n = s))   # run the simulation
-  fin <- c(fin , Sys.time() - beg)}   # ending time
+  fin <- Sys.time() - beg #ending time
+  return(fin)
+}
 
-tab_time <- data.frame (Simulation_size  = c("100", "1000", "10000", "100000", "1000000", "10000000") , Computational_time = fin )   # creating the dataframe of the results
+results <- sapply(Sim , timing_fun)
+
+tab_time <- data.frame (Simulation_size  = c("100", "1000", "10000", "100000", "1000000", "10000000") , Computational_time = results  )   # creating the dataframe of the results
 tab_time
-paste("The median speed over M is : " , median(fin))
+paste("The median speed over M is : " , median(results))
 
 ```
 
