@@ -1,0 +1,195 @@
+
+rm(list=ls())
+
+# Setting parameters
+n <- 1000
+m <- 10
+h <- 1/m
+eps <- .001
+
+# Generating the random sample from the beta
+X <- rbeta(n, 10, 10)
+
+# Set the bins
+bins <- seq(0, 1, h)
+
+# Rename units with the bins they belong
+intervals <- cut(X, bins, include.lowest = T)
+
+# Finding the frequencies of units inside each bins
+pj_hat <- table(intervals) / n
+
+# Computing high of each bin dividing the frequencies for the width of the bin
+p_hat <- as.vector(pj_hat / h)
+p_hat
+
+
+
+
+# Importing packages to use Laplace function
+library(VGAM)
+
+# Generating m values from a Laplacian: one for each bin
+nu <- rlaplace(m, 0, 8/eps^2)
+nu
+
+# Adding nu to every absolute frequencies of each bin
+Dj <- table(intervals) + nu
+
+# Finding qj_hat dividing max(0, Dj) for the sum of Dj
+qj_hat <- c()
+for(d in Dj){
+  qj_hat <- c(qj_hat, max(d,0) / sum(Dj))
+}
+
+# Computing the high of the histogram dividing by the width of the columns
+q_hat <- qj_hat / h
+
+
+
+# Plotting p_hat and q_hat
+plot(p_hat, col='red', pch=16, xaxt='n', ylab = 'Density', xlab = 'Bins', main='Plot of p_hat and q_hat')
+axis(1, at = 0:m, lab=bins)
+points(q_hat, col = 'blue', pch = 16)
+
+
+
+# Plotting
+plot(seq(h,1,h), p_hat, xlim=c(0,1), ylim=c(0, 4), 'n', ylab = 'Density', xlab = 'Bins', main='Plot of p_hat and q_hat')
+legend('topright', legend=c('p_hat', 'q_hat', 'Beta(10,10)'), col = c('red', 'blue', 'green'), lwd=3, lty=1)
+
+curve(dbeta(x, 10,10), col='green', lwd = 3, add = T)
+
+p <- 0
+for(i in 1:m){
+  segments(p ,p_hat[i], p + h, p_hat[i], col = 'red', lwd = 3)
+  segments(p + h, p_hat[i], p + h, p_hat[i+1], col='red', lty=3, lwd=3)
+  p <- p + h}
+
+q <- 0
+for(i in 1:m){
+  segments(q ,q_hat[i], q +h, q_hat[i], col = 'blue', lwd = 3)
+  segments(q + h, q_hat[i], q + h, q_hat[i+1], col='blue', lty=3, lwd=3)
+  q <- q + h}
+
+
+# Defining step functions for p_hat and q_hat
+p_hat_func <- function(x){
+  interval <- cut(x, bins, include.lowest = T)
+  levels   <- levels(interval)
+  f        <- p_hat[interval == levels]
+  return(f)
+}
+
+q_hat_func <- function(x){
+  interval <- cut(x, bins, include.lowest = T)
+  levels   <- levels(interval)
+  f        <- q_hat[interval == levels]
+  return(f)
+}
+
+# Defining MSE function (value inside integral of MISE)
+MSE_p <- function(x) (dbeta(x, 10, 10) - p_hat_func(x))^2
+MSE_q <- function(x) (dbeta(x, 10, 10) - q_hat_func(x))^2
+
+# Computing integral
+integrate(Vectorize(MSE_p), lower=0, upper=1)
+integrate(Vectorize(MSE_q), lower=0, upper=1)
+
+
+
+
+
+
+# Simulation --------------------------------------------------------------
+# Importing packages to use Laplace function
+library(VGAM)
+
+# Defining step functions for p_hat and q_hat
+p_hat_func <- function(x, m){
+  interval <- cut(x, bins, include.lowest = T)
+  levels   <- levels(interval)
+  f        <- p_hat[interval == levels]
+  return(f)
+}
+
+q_hat_func <- function(x){
+  interval <- cut(x, bins, include.lowest = T)
+  levels   <- levels(interval)
+  f        <- q_hat[interval == levels]
+  return(f)
+}
+
+# Defining MSE function (value inside integral of MISE)
+MSE_p <- function(x) (dbeta(x, 10, 10) - p_hat_func(x))^2
+MSE_q <- function(x) (dbeta(x, 10, 10) - q_hat_func(x))^2
+
+
+M <- seq(5, 20, 1)
+
+m_p <- c()
+m_q <- c()
+
+for(m in M){
+  print(m)
+  
+  for(rep in 1:10){
+    final_p <- c()
+    final_q <- c()
+    
+    # Setting parameters
+    n <- 1000
+    h <- 1/m
+    eps <- .001
+    
+    # Generating the random sample from the beta
+    X <- rbeta(n, 10, 10)
+    
+    # Set the bins
+    bins <- seq(0, 1, h)
+    
+    # Rename units with the bins they belong
+    intervals <- cut(X, bins, include.lowest = T)
+    
+    # Finding the frequencies of units inside each bins
+    pj_hat <- table(intervals) / n
+    
+    # Computing high of each bin dividing the frequencies for the width of the bin
+    p_hat <- as.vector(pj_hat / h)
+    p_hat
+    
+    
+    # Generating m values from a Laplacian: one for each bin
+    nu <- rlaplace(m, 0, 8/eps^2)
+    nu
+    
+    # Adding nu to every absolute frequencies of each bin
+    Dj <- table(intervals) + nu
+    
+    # Finding qj_hat dividing max(0, Dj) for the sum of Dj
+    qj_hat <- c()
+    for(d in Dj){
+      qj_hat <- c(qj_hat, max(d,0) / sum(Dj))
+    }
+    
+    # Computing the high of the histogram dividing by the width of the columns
+    q_hat <- qj_hat / h
+    
+    
+    # Computing integral
+    p <- integrate(Vectorize(MSE_p), lower=0, upper=1, subdivisions=2000)$value
+    q <- integrate(Vectorize(MSE_q), lower=0, upper=1, subdivisions=2000)$value
+    final_p <- c(final_p, p)
+    final_q <- c(final_q, q)
+    
+  }
+  m_p <- c(m_p, mean(final_p))
+  m_q <- c(m_q, mean(final_q))
+}
+
+
+plot(1:length(M), m_p, col='blue', pch=16,ylim=c(0,350))
+points(1:length(M), m_q, col='red', pch=16)
+
+
+
