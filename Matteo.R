@@ -30,7 +30,7 @@ p_hat
 library(VGAM)
 
 # Generating m values from a Laplacian: one for each bin
-nu <- rlaplace(m, 0, 8/eps^2)
+nu <- rlaplace(m, 0, 2/eps)
 nu
 
 # Adding nu to every absolute frequencies of each bin
@@ -39,9 +39,11 @@ Dj <- table(intervals) + nu
 # Finding qj_hat dividing max(0, Dj) for the sum of Dj
 qj_hat <- c()
 for(d in Dj){
-  qj_hat <- c(qj_hat, max(d,0) / sum(Dj))
+  qj_hat <- c(qj_hat, max(d,0))
 }
-qj_hat <- qj_hat / sum(qj_hat)
+if (sum(qj_hat) != 0){
+  qj_hat <- qj_hat / sum(qj_hat)
+  } else {qj_hat <- rep(0, length(qj_hat))}
 
 # Computing the high of the histogram dividing by the width of the columns
 q_hat <- qj_hat / h
@@ -126,7 +128,7 @@ MSE_p <- function(x) (dbeta(x, 10, 10) - p_hat_func(x))^2
 MSE_q <- function(x) (dbeta(x, 10, 10) - q_hat_func(x))^2
 
 
-M <- seq(5, 20, 1)
+M <- seq(5, 10, 1)
 n <- 100
 eps <- .1
 
@@ -136,7 +138,7 @@ mise_q <- c()
 for(m in M){
   print(m)
   
-  for(rep in 1:20){
+  for(rep in 1:1000){
     integral_p <- c()
     integral_q <- c()
 
@@ -161,7 +163,7 @@ for(m in M){
     
     
     # Generating m values from a Laplacian: one for each bin
-    nu <- rlaplace(m, 0, 8/eps^2)
+    nu <- rlaplace(m, 0, 2/eps)
     nu
     
     # Adding nu to every absolute frequencies of each bin
@@ -172,9 +174,8 @@ for(m in M){
     for(d in Dj){
       qj_hat <- c(qj_hat, max(d,0))
     }
-    if (sum(qj_hat) !=0){
-      qj_hat <- qj_hat / sum(qj_hat)}
-    else{qj_hat <- rep(0, length(qj_hat))}
+    if (sum(qj_hat) != 0){
+      qj_hat <- qj_hat / sum(qj_hat)} else {qj_hat <- rep(0, length(qj_hat))}
     
     # Computing the high of the histogram dividing by the width of the columns
     q_hat <- qj_hat / h
@@ -191,9 +192,11 @@ for(m in M){
   mise_q <- c(mise_q, mean(integral_q))
 }
 
-
+par(mfrow=c(1,1))
 plot(5:(length(M)+4), mise_p, col='blue', pch=16,ylim=c(0,10), xlab='m', type='l')
 points(5:(length(M)+4), mise_q, col='red', pch=16, type='l')
 
+plot(5:(m-1), mise_p, col='blue', pch=16,ylim=c(0,10), xlab='m', type='l')
+points(5:(m-1), mise_q, col='red', pch=16, type='l')
 
 

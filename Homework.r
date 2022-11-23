@@ -18,46 +18,7 @@ for (m in 1:M){
 p_hat <- proportions( table( t_data ) )
 
 
-<<<<<<< HEAD
-
-#############by now the fastest way############
-
-#The idea is to use a mixture model, so we generate m Unif(0,1) and then use them as a parameters of the geometric distributions 
-#Thinking as before but more treaky in the code ( as Matteo said)
-
-Sim <- c(100, 1000, 10000, 100000, 1000000, 10000000)
-
-fin <- c()
-
-f = function(s){
-  beg <- Sys.time()  
-  stop_simulations <- rgeom(n = s, prob = runif(n = s))
-  fin <- c(fin , Sys.time() - beg)
-  return(fin)
-}
-
-?sapply
-reuslts <- sapply( Sim , f )
-reuslts
-
-tab_time <- data.frame (Simulation_size  = c("100", "1000", "10000", "100000", "1000000", "10000000") ,
-            Computational_time = fin
-)
-tab_time
-
-
-
-M <-             # simulation size
-# # pre-allocation the data structure (simple vector)
-
-stop_simulation <-rgeom(n = M, prob = runif(n = M))
-
-p_hat <- proportions( table( stop_simulation ))
-
-#RE-RE-plotting the true distribution
-=======
 # True marginal PMF of T
->>>>>>> f97e6eededfc9019cbcd21a78b198ac4e549a1f8
 pT <- function(t)  1/(t*(t+1))
 
 # Plot it zooming in between t = 1 and t = 25

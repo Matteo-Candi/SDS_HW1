@@ -161,7 +161,7 @@ for(m in M){
     
     
     # Generating m values from a Laplacian: one for each bin
-    nu <- rlaplace(m, 0, 8/eps^2)
+    nu <- rlaplace(m, 0, 2/eps)
     nu
     
     # Adding nu to every absolute frequencies of each bin
