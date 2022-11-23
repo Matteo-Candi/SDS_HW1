@@ -41,6 +41,7 @@ qj_hat <- c()
 for(d in Dj){
   qj_hat <- c(qj_hat, max(d,0) / sum(Dj))
 }
+qj_hat <- qj_hat / sum(qj_hat)
 
 # Computing the high of the histogram dividing by the width of the columns
 q_hat <- qj_hat / h
@@ -126,21 +127,21 @@ MSE_q <- function(x) (dbeta(x, 10, 10) - q_hat_func(x))^2
 
 
 M <- seq(5, 20, 1)
+n <- 100
+eps <- .1
 
-m_p <- c()
-m_q <- c()
+mise_p <- c()
+mise_q <- c()
 
 for(m in M){
   print(m)
   
-  for(rep in 1:10){
-    final_p <- c()
-    final_q <- c()
+  for(rep in 1:20){
+    integral_p <- c()
+    integral_q <- c()
 
-    # Setting parameters
-    n <- 1000
+    # Setting h
     h <- 1/m
-    eps <- .001
     
     # Generating the random sample from the beta
     X <- rbeta(n, 10, 10)
@@ -169,8 +170,11 @@ for(m in M){
     # Finding qj_hat dividing max(0, Dj) for the sum of Dj
     qj_hat <- c()
     for(d in Dj){
-      qj_hat <- c(qj_hat, max(d,0) / sum(Dj))
+      qj_hat <- c(qj_hat, max(d,0))
     }
+    if (sum(qj_hat) !=0){
+      qj_hat <- qj_hat / sum(qj_hat)}
+    else{qj_hat <- rep(0, length(qj_hat))}
     
     # Computing the high of the histogram dividing by the width of the columns
     q_hat <- qj_hat / h
@@ -179,17 +183,17 @@ for(m in M){
     # Computing integral
     p <- integrate(Vectorize(MSE_p), lower=0, upper=1, subdivisions=2000)$value
     q <- integrate(Vectorize(MSE_q), lower=0, upper=1, subdivisions=2000)$value
-    final_p <- c(final_p, p)
-    final_q <- c(final_q, q)
+    integral_p <- c(integral_p, p)
+    integral_q <- c(integral_q, q)
 
   }
-  m_p <- c(m_p, mean(final_p))
-  m_q <- c(m_q, mean(final_q))
+  mise_p <- c(mise_p, mean(integral_p))
+  mise_q <- c(mise_q, mean(integral_q))
 }
 
 
-plot(1:length(M), m_p, col='blue', pch=16,ylim=c(0,350))
-points(1:length(M), m_q, col='red', pch=16)
+plot(5:(length(M)+4), mise_p, col='blue', pch=16,ylim=c(0,10), xlab='m', type='l')
+points(5:(length(M)+4), mise_q, col='red', pch=16, type='l')
 
 
 
