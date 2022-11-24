@@ -77,12 +77,16 @@ for(i in 1:m){
 
 
 # Defining step functions for p_hat and q_hat
-p_hat_func <- function(x){
+p_hat_func <- function(x , b){
   interval <- cut(x, bins, include.lowest = T)
   levels   <- levels(interval)
   f        <- p_hat[interval == levels]
   return(f)
-  }
+}
+
+
+
+
 
 q_hat_func <- function(x){
   interval <- cut(x, bins, include.lowest = T)
@@ -109,7 +113,7 @@ integrate(Vectorize(MSE_q), lower=0, upper=1)
 library(VGAM)
 
 # Defining step functions for p_hat and q_hat
-p_hat_func <- function(x, m){
+p_hat_func <- function(x){
   interval <- cut(x, bins, include.lowest = T)
   levels   <- levels(interval)
   f        <- p_hat[interval == levels]
@@ -164,16 +168,14 @@ for(m in M){
     
     # Generating m values from a Laplacian: one for each bin
     nu <- rlaplace(m, 0, 2/eps)
-    nu
     
     # Adding nu to every absolute frequencies of each bin
     Dj <- table(intervals) + nu
     
+    Dj[Dj < 0] = 0
+    qj_hat = Dj
+    
     # Finding qj_hat dividing max(0, Dj) for the sum of Dj
-    qj_hat <- c()
-    for(d in Dj){
-      qj_hat <- c(qj_hat, max(d,0))
-    }
     if (sum(qj_hat) != 0){
       qj_hat <- qj_hat / sum(qj_hat)} else {qj_hat <- rep(0, length(qj_hat))}
     

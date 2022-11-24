@@ -180,6 +180,82 @@ grid()
 
 
 
+# Exercise 2 --------------------------------------------------------------
+
+rm(list=ls())
+
+
+library(VGAM)   # Import package for Laplace distribution
+
+# Defining step functions for p_hat 
+p_hat_func <- function(x , bins , p_hat ){
+  interval <- cut(x, bins, include.lowest = T)
+  levels   <- levels(interval)
+  f        <- p_hat[interval == levels]
+  return(f)
+}
+
+# Defining step functions for q_hat
+
+q_hat_func <- function(x, bins, q_hat){
+  interval <- cut(x, bins, include.lowest = T)
+  levels   <- levels(interval)
+  f        <- q_hat[interval == levels]
+  return(f)
+}
+
+
+
+#Define the simulation function
+
+simulation_function <- function(m ,sim_size = 100, n=100, h = 1/m , eps = .1 ){
+  for(rep in 1:sim_size){  
+    m <- 5
+    integral_p <- c()       # Pre-allocate the vector of the integral
+    integral_q <- c()       # Pre-allocate the vector of the integral
+    
+    X <- rbeta(n, 10, 10)   # Generating the random sample from the beta
+    
+    bins <- seq(0, 1, h)    # Set the bins
+    
+    intervals <- cut(X, bins, include.lowest = T)  # Rename units with the bins they belong
+    
+    
+    pj_hat <- table(intervals) / n              # Finding the frequencies of units inside each bins
+    
+    
+    p_hat <- as.vector(pj_hat / h)              # Computing high of each bin dividing the frequencies for the width of the bin
+    
+    nu <- rlaplace(m, 0, 2/eps)                 # Generating m values from a Laplacian: one for each bin
+    
+    
+    Dj <- table(intervals) + nu                 # Adding nu to every absolute frequencies of each bin
+    
+    Dj[Dj < 0] = 0    # Set all the nagative values to 0 t                      
+    qj_hat = Dj
+    
+    # Finding qj_hat dividing max(0, Dj) for the sum of Dj
+    if (sum(qj_hat) != 0){
+      qj_hat <- qj_hat / sum(qj_hat)} else {qj_hat <- rep(0, length(qj_hat))}
+    
+
+    q_hat <- qj_hat / h      # Computing the high of the histogram dividing by the width of the columns
+    
+    
+    # Compute the function to integrate 
+    to_integrate_1 <- function(x){return((dbeta(x, 10, 10) - p_hat_func(x,bins = bins , p_hat = p_hat))^2)}
+    to_integrate_2 <- function(x){return((dbeta(x, 10, 10) - q_hat_func(x,bins = bins , q_hat = q_hat))^2)}
+    # Compute the integral
+    p <- integrate( Vectorize(to_integrate_1) , lower = 0 , upper = 1, subdivisions=2000)$value
+    q <- integrate( Vectorize(to_integrate_2) , lower = 0 , upper = 1, subdivisions=2000)$value
+    integral_p <- c(integral_p, p)
+    integral_q <- c(integral_q, q)
+    
+  }
+  mise_p <- mean(integral_p)   #Save the results
+  mise_q <- mean(integral_q)   #Save the results
+  return(c(mise_p , mise_q))
+}
 
 
 
@@ -188,4 +264,10 @@ grid()
 
 
 
+M = seq(5, 10 , 2)
 
+results <- sapply(M ,simulation_function)
+
+data = data.frame(results , row.names = c("MISE p_hat" , "MISE q_hat"))  
+colnames(data) =  M
+data
