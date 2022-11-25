@@ -196,4 +196,10 @@ plot(5:(length(M)+4), mise_p, col='blue', pch=16,ylim=c(0,10), xlab='m', type='l
 points(5:(length(M)+4), mise_q, col='red', pch=16, type='l')
 
 
+u <- rbeta(1, 10,10)
+u(1, 10, 10)
+
+
+
+
 

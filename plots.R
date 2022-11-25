@@ -1,3 +1,7 @@
+source("Simulation_Function.r")
+
+
+
 par(mfrow=c(2,2))
 
 colors <- c('blue', 'red')
