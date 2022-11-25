@@ -201,5 +201,6 @@ u(1, 10, 10)
 
 
 
-
+curve(mixture_beta(x), add = T)
+hist(rmixture(1000), freq=F)
 

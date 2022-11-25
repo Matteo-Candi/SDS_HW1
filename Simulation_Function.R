@@ -19,7 +19,7 @@ q_hat_func <- function(x, bins, q_hat){
 
 
 # Defining Mixture of Beta
-mixture_beta <- function(x, shape_1 = 2 , shape_2 = 15 , shape_3 = 12 , shape_4 = 6 , pi = 0.6 ){
+dmixture <- function(x, shape_1 = 2 , shape_2 = 15 , shape_3 = 12 , shape_4 = 6 , pi = 0.6 ){
   f <- pi * dbeta(x, shape1 = shape_1 , shape2 = shape_2) + (1 - pi) * dbeta(x, shape1 = shape_3 , shape2 = shape_4)
   return(f)
 }
@@ -39,12 +39,13 @@ rmixture <- function(n, shape_1 = 2 , shape_2 = 15 , shape_3 = 12 , shape_4 = 6 
 
 
 simulation_function <- function(m , sim_size = 100, n=100, h = 1/m , eps = .1, func='beta'){
+  print(m)
   
   if(func == 'beta'){
     distr = function(x) dbeta(x,shape1 = 10, shape2 = 10)
     sample_distr = function(n) rbeta(n, 10, 10)} 
   else if(func == 'mixture'){
-    distr = mixture_beta
+    distr = dmixture
     sample_distr = function(n) rmixture(n)}
   else{stop("The 'func' input is wrong. Choose between 'beta' or 'mixture'!")}
   
@@ -101,8 +102,7 @@ simulation_function <- function(m , sim_size = 100, n=100, h = 1/m , eps = .1, f
 
 #simulation_function(m , sim_size = 10, n=n, h = 1/m , eps = eps, func='lol')
 
-#a <- lapply(5:8, simulation_function, sim_size = 2, n=n, h = 1/m , eps = eps, func='mixture')
-
+a <- lapply(5:8, simulation_function, sim_size = 100, n=100 , func='beta')
 
 
 
