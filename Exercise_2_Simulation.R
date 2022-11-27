@@ -101,7 +101,7 @@ simulation_function <- function(m , sim_size = 100, n=100, h = 1/m , eps = .1, f
 ##### Running Simulation  #####
 
 
-m <- seq(5,8)
+m <- seq(5,7)
 
 Beta_sim_n100_eps_1 <- lapply(m, simulation_function, sim_size = 100, n=100 , func='beta', eps = .1)
 
@@ -114,6 +114,22 @@ Beta_sim_n1000_eps_1 <- lapply(m, simulation_function, sim_size = 100, n=1000 , 
 Beta_sim_n1000_eps_0001 <- lapply(m, simulation_function, sim_size = 100, n=1000 , func='beta', eps = 0.001)
 
 
+##### Saving into dataset  #####
+labels <- c("p_hat" , "q_hat")
+
+
+### 1
+df_n100_eps_1 <-  as.data.frame(do.call(rbind, Beta_sim_n100_eps_1 ) , row.names = m )
+colnames(df_n100_eps_1)  <- labels
+### 2
+df_n100_eps_0001 <-  as.data.frame(do.call(rbind, Beta_sim_n100_eps_0001 ) , row.names = m )
+colnames(df_n100_eps_1)  <- labels
+### 3
+df_n1000_eps_1 <-  as.data.frame(do.call(rbind, Beta_sim_n1000_eps_1 ) , row.names = m )
+colnames(df_n100_eps_1)  <- labels
+### 4
+df_n1000_eps_0001 <-  as.data.frame(do.call(rbind, Beta_sim_n100_eps_1 ) , row.names = m )
+colnames(df_n100_eps_1)  <- labels
 #####
 
 
