@@ -47,4 +47,4 @@ plot(5:(length(mise_p_vec)+4), mise_p_vec, ylab='MISE', xlab='m',sub = expressio
 points(5:(length(mise_q_vec)+4), mise_q_vec, type='l', lwd=3, col=colors[2])
 
 
-
+mise

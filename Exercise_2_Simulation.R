@@ -1,5 +1,8 @@
-library(VGAM)
-
+# Exercise_2
+rm(list=ls())       #Clear output
+library(VGAM)       # Library for the Laplacian Function
+set.seed(13112221)  # For reprocibility
+##### Step Function for p_hat #####
 
 # Defining step functions for p_hat 
 p_hat_func <- function(x , bins , p_hat ){
@@ -8,24 +11,19 @@ p_hat_func <- function(x , bins , p_hat ){
   f        <- p_hat[interval == levels]
   return(f)
 }
-
-# Defining step functions for q_hat
+##### Step Function for q_hat #######
 q_hat_func <- function(x, bins, q_hat){
   interval <- cut(x, bins, include.lowest = T)
   levels   <- levels(interval)
   f        <- q_hat[interval == levels]
   return(f)
 }
-
-
-# Defining Mixture of Beta
+##### Mixture distribution of Beta ######
 dmixture <- function(x, shape_1 = 2 , shape_2 = 15 , shape_3 = 12 , shape_4 = 6 , pi = 0.6 ){
   f <- pi * dbeta(x, shape1 = shape_1 , shape2 = shape_2) + (1 - pi) * dbeta(x, shape1 = shape_3 , shape2 = shape_4)
   return(f)
 }
-
-
-# Defining the random Mixture Beta
+##### Random sample from Mixture Beta  #####
 rmixture <- function(n, shape_1 = 2 , shape_2 = 15 , shape_3 = 12 , shape_4 = 6 , pi = 0.6 ){
   sam <- c()
   u <- runif(n)
@@ -36,6 +34,7 @@ rmixture <- function(n, shape_1 = 2 , shape_2 = 15 , shape_3 = 12 , shape_4 = 6 
   return(sam)
 }
 
+#####  Simulation Function #######
 
 
 simulation_function <- function(m , sim_size = 100, n=100, h = 1/m , eps = .1, func='beta'){
@@ -99,12 +98,22 @@ simulation_function <- function(m , sim_size = 100, n=100, h = 1/m , eps = .1, f
   return(c(mise_p , mise_q))
 }
 
-
-#simulation_function(m , sim_size = 10, n=n, h = 1/m , eps = eps, func='lol')
-
-a <- lapply(5:8, simulation_function, sim_size = 100, n=100 , func='beta')
+##### Running Simulation  #####
 
 
+m <- seq(5,8)
 
+Beta_sim_n100_eps_1 <- lapply(m, simulation_function, sim_size = 100, n=100 , func='beta', eps = .1)
+
+
+Beta_sim_n100_eps_0001 <- lapply(m, simulation_function, sim_size = 100, n=100 , func='beta', eps = 0.001)
+
+Beta_sim_n1000_eps_1 <- lapply(m, simulation_function, sim_size = 100, n=1000 , func='beta', eps = .1)
+
+
+Beta_sim_n1000_eps_0001 <- lapply(m, simulation_function, sim_size = 100, n=1000 , func='beta', eps = 0.001)
+
+
+#####
 
 
