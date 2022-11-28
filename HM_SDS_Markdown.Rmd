@@ -1,5 +1,5 @@
 ---
-title: "Homework 1 of Statistical for Data Science"
+title: "Homework 1 of Statistical of Data Science"
 author: "Barba Paolo, Candi Matteo"
 date: ''
 output: html_document
@@ -21,8 +21,6 @@ We run  a simulation with size:
 M = { 100, 1000, 10000, 100000, 1000000, 10000000}
 
 ```{r simualtion  time}
-set.seed(13112221)   # For reproducibility
-
 Sim <- c(100, 1000, 10000, 100000, 1000000, 10000000)  # vector of the size 
 fin <- c()    # inizialize the the vector of the result
 timing_fun <- function(s){
@@ -110,26 +108,20 @@ grid()}
 
 ## Computational Analysis:
 
-In this section we would quantitatively check how the simulation size impacts the approximation, in order to show that, we are going to compute the mean error distances between the true distribution and the estimated distibution.
-
-For each simulation size we compute the mean distance over the set 1:25.
+In this section we would quantitatively check how the simulation size impacts the approximation, in order to show that, we are going to compute the distances between the true distribution and the estimated distibution.
 
 ```{r simualtion analysis}
-Sim <- c(100, 1000, 10000, 100000, 1000000, 10000000 )  # vector of the size 
-M <- 100    # Simulation size
-diff <- matrix(NA , nrow =  length(Sim) , ncol = M )       # inizialize the the vector of the result
+Sim <- c(100, 1000, 10000, 100000, 1000000, 10000000)  # vector of the size 
+diff <- matrix(NA , 6 )       # inizialize the the vector of the result
 
+for (s in Sim){
+  stop_simulations <-  rgeom(n = s, prob = runif(n = s))   # run the simulation
+  p_hat <- proportions(table(stop_simulations))
+  i=1
+  diff[i] <- pT(t_seq) - p_hat[t_seq]
+  i <- i +1
+}
 
-for (j in 1:M){
-  i <- 1   
-  for (s in Sim){    
-    stop_simulations <-  rgeom(n = s, prob = runif(n = s))   # run the simulation
-    p_hat <- proportions(table(stop_simulations))
-    
-    diff[i,j] <- mean(pT(t_seq) - p_hat[t_seq], na.rm = T)  #compute the mean distance
-    i <- i + 1
-}
-}
 ```
 
 ## Statistical Analysis
@@ -224,4 +216,9 @@ rev <- revenue_f[i]
      sub = paste("Simulation size:", M))
 grid() 
 }
+
+
+
+
+
 ```

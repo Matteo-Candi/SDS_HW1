@@ -1,8 +1,5 @@
-# Exercise_2
-rm(list=ls())       #Clear output
-library(VGAM)       # Library for the Laplacian Function
-set.seed(13112221)  # For reprocibility
-##### Step Function for p_hat #####
+library(VGAM)
+
 
 # Defining step functions for p_hat 
 p_hat_func <- function(x , bins , p_hat ){
@@ -11,19 +8,24 @@ p_hat_func <- function(x , bins , p_hat ){
   f        <- p_hat[interval == levels]
   return(f)
 }
-##### Step Function for q_hat #######
+
+# Defining step functions for q_hat
 q_hat_func <- function(x, bins, q_hat){
   interval <- cut(x, bins, include.lowest = T)
   levels   <- levels(interval)
   f        <- q_hat[interval == levels]
   return(f)
 }
-##### Mixture distribution of Beta ######
+
+
+# Defining Mixture of Beta
 dmixture <- function(x, shape_1 = 2 , shape_2 = 15 , shape_3 = 12 , shape_4 = 6 , pi = 0.6 ){
   f <- pi * dbeta(x, shape1 = shape_1 , shape2 = shape_2) + (1 - pi) * dbeta(x, shape1 = shape_3 , shape2 = shape_4)
   return(f)
 }
-##### Random sample from Mixture Beta  #####
+
+
+# Defining the random Mixture Beta
 rmixture <- function(n, shape_1 = 2 , shape_2 = 15 , shape_3 = 12 , shape_4 = 6 , pi = 0.6 ){
   sam <- c()
   u <- runif(n)
@@ -34,7 +36,6 @@ rmixture <- function(n, shape_1 = 2 , shape_2 = 15 , shape_3 = 12 , shape_4 = 6 
   return(sam)
 }
 
-#####  Simulation Function #######
 
 
 simulation_function <- function(m , sim_size = 100, n=100, h = 1/m , eps = .1, func='beta'){
@@ -98,45 +99,11 @@ simulation_function <- function(m , sim_size = 100, n=100, h = 1/m , eps = .1, f
   return(c(mise_p , mise_q))
 }
 
-##### Running Simulation  #####
 
+#simulation_function(m , sim_size = 10, n=n, h = 1/m , eps = eps, func='lol')
 
-m <- seq(5,7)
-simulation_size <- 100
+a <- lapply(5:8, simulation_function, sim_size = 100, n=100 , func='beta')
 
-Beta_sim_n100_eps_1 <- lapply(m, simulation_function, sim_size = simulation_size, n=100 , func='beta', eps = .1)
-
-
-Beta_sim_n100_eps_0001 <- lapply(m, simulation_function, sim_size = simulation_size, n=100 , func='beta', eps = 0.001)
-
-Beta_sim_n1000_eps_1 <- lapply(m, simulation_function, sim_size = simulation_size, n=1000 , func='beta', eps = .1)
-
-
-Beta_sim_n1000_eps_0001 <- lapply(m, simulation_function, sim_size = simulation_size, n=1000 , func='beta', eps = 0.001)
-
-
-##### Saving into dataset  #####
-labels <- c("p_hat" , "q_hat")
-
-
-### 1
-df_n100_eps_1 <-  as.data.frame(do.call(rbind, Beta_sim_n100_eps_1 ) , row.names = m )
-colnames(df_n100_eps_1)  <- labels
-### 2
-df_n100_eps_0001 <-  as.data.frame(do.call(rbind, Beta_sim_n100_eps_0001 ) , row.names = m )
-colnames(df_n100_eps_1)  <- labels
-### 3
-df_n1000_eps_1 <-  as.data.frame(do.call(rbind, Beta_sim_n1000_eps_1 ) , row.names = m )
-colnames(df_n100_eps_1)  <- labels
-### 4
-df_n1000_eps_0001 <-  as.data.frame(do.call(rbind, Beta_sim_n100_eps_1 ) , row.names = m )
-colnames(df_n100_eps_1)  <- labels
-#####
-
-save(df_n100_eps_1, file='df_n100_eps_1.RData')
-save(df_n100_eps_0001, file='df_n100_eps_0001.RData')
-save(df_n1000_eps_1, file='df_n1000_eps_1.RData')
-save(df_n1000_eps_0001, file='df_n1000_eps_0001.RData')
 
 
 

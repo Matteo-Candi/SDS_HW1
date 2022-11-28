@@ -1,18 +1,21 @@
+
 rm(list=ls())
+
 # Exercise 1 Stopping time   ----------------------------- 
 ######### First code############################
- 
-Sim <- c(100, 1000, 10000, 100000, 1000000, 10000000)  # vector of the size 
-fin <- c()    # inizialize the the vector of the result
-timing_fun <- function(s){
-  beg <- Sys.time()     # starting time
-  stop_simulations <-  rgeom(n = s, prob = runif(n = s))   # run the simulation
-  fin <- Sys.time() - beg #ending time
-  return(fin)
+M <- 10000             # simulation size
+t_data <- rep(NA, M)   # pre-allocation the data structure (simple vector)
+for (m in 1:M){
+  x <- runif(1)    # sampling the threshold value
+  y <- runif(1)    # first process value
+  t <- 1
+  while (y > x) {
+    t <- t + 1
+    y <- runif(1)  # no memory
+  }
+  t_data[m] <- t   # save
 }
-
-results <- sapply(Sim , timing_fun)
-
+p_hat <- proportions( table( t_data ) )
 
 
 # True marginal PMF of T
