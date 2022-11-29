@@ -1,7 +1,7 @@
 par(mfrow=c(2,2), font.main=1)
 
-colors <- c('blue', 'red')
-y_lim <- 10
+colors <- c("#2297E6", "#DF536B" )
+y_lim <- 12
 labels <- c("p_hat" , "q_hat")
 eps <- c(.1, .001, .1, .001)
 enne <- c(100, 100, 1000, 1000)
@@ -17,6 +17,7 @@ for(i in 1:4){
   q_hat <- d$q_hat
   
   plot(5:(length(p_hat)+4), p_hat, ylab='MISE', xlab='', sub = bquote(epsilon == .(eps[i])), type='l', lwd=3, col=colors[1], ylim=c(0,y_lim), main = paste('n = ', enne[i]))
+  grid()
   mtext(text = 'm',side = 1, line = 2, cex=.8)
   points(5:(length(q_hat)+4), q_hat, type='l', lwd=3, col=colors[2])
 }
@@ -40,9 +41,4 @@ for(i in 1:4){
 
 
 
-
-beta_n1000_eps_01 <- beta_n1000_eps_1
-save(beta_n1000_eps_01, file='simulation_data/beta_n1000_eps_01.RData')
-beta_n100_eps_01 <- beta_n100_eps_1
-save(beta_n100_eps_01, file='simulation_data/beta_n100_eps_01.RData')
 
