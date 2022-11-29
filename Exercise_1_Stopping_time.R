@@ -73,29 +73,28 @@ for (j in 1:M){
     stop_simulations <-  rgeom(n = s, prob = runif(n = s))   # run the simulation
     p_hat <- proportions(table(stop_simulations))
     
-    diff[i,j] <- mean(pT(t_seq) - p_hat[t_seq], na.rm = T) 
+    diff[i,j] <- sum(pT(t_seq) - p_hat[t_seq], na.rm = T) 
     diff
     i <- i + 1
 }
 }
 
 
-
-plot(diff[1,] , ylim = c(-0.009,0.009), type = "l" , main = "Error") 
-points(diff[2,] , col = 'blue' , type = "l")
-points(diff[3,] , col = 'red', type = "l")  
-points(diff[4,] , col = 'green', type = "l")
-points(diff[5,] , col = "pink", type = "l")
-
-
+save( diff , file='Computational_analysis')
+par(mfrow = c( 1, 1))
+plot(diff[1,] , ylim  = c( -.09 , .09),
+     type = "l" , main = "Series of the errors" , 
+     lwd = 2 , xlab = "Trials",
+     ylab = "Sum of the errors per Simulation Size" ) 
 
 
-hist(diff[1,])
-hist(diff[2,])
-hist(diff[3,])
-hist(diff[4,])
-hist(diff[5,])
-hist(diff[6,])
+points(diff[2,] , col = 'blue' , type = "l", lwd = 2)
+points(diff[3,] , col = 'red', type = "l",  lwd = 2)  
+points(diff[4,] , col = 'green', type = "l", lwd = 2)
+points(diff[5,] , col = "pink", type = "l",  lwd = 2)
+
+legend("topright",legend = Sim, col = c("black","blue", "red", "green", "pink"), lty = 1 ,merge = TRUE, bg = "lightgray")
+grid()
 
 
 #####
