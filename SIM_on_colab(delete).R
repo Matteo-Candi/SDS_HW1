@@ -109,10 +109,10 @@ labels <- c("p_hat" , "q_hat")
 #######Beta
 
 ### 1
-Beta_sim_n100_eps_1 <- lapply(m, simulation_function, sim_size = simulation_size, n=100 , func='beta', eps = .1)
-beta_n100_eps_1 <- as.data.frame(do.call(rbind, Beta_sim_n100_eps_1 ) , row.names = m )
-colnames(beta_n100_eps_1)  <- labels
-# save(beta_n100_eps_1, file='beta_n100_eps_01.RData')
+Beta_sim_n100_eps_01 <- lapply(m, simulation_function, sim_size = simulation_size, n=100 , func='beta', eps = .1)
+beta_n100_eps_1 <- as.data.frame(do.call(rbind, Beta_sim_n100_eps_01 ) , row.names = m )
+colnames(beta_n100_eps_01)  <- labels
+save(beta_n100_eps_01, file='beta_n100_eps_01.RData')
 
 
 ### 2
@@ -122,25 +122,25 @@ colnames(beta_n100_eps_0001)  <- labels
 save(beta_n100_eps_0001, file='beta_n100_eps_0001.RData')
 
 ### 3
-Beta_sim_n1000_eps_1 <- lapply(m, simulation_function, sim_size = simulation_size, n=1000 , func='beta', eps = .1)
-beta_n1000_eps_1 <- as.data.frame(do.call(rbind, Beta_sim_n1000_eps_1 ) , row.names = m )
-colnames(beta_n1000_eps_1)  <- labels
-save(df_n1000_eps_1, file='beta_n1000_eps_01.RData')
+Beta_sim_n1000_eps_01 <- lapply(m, simulation_function, sim_size = simulation_size, n=1000 , func='beta', eps = .1)
+beta_n1000_eps_1 <- as.data.frame(do.call(rbind, Beta_sim_n1000_eps_01 ) , row.names = m )
+colnames(beta_n1000_eps_01)  <- labels
+save(beta_n1000_eps_01, file='beta_n1000_eps_01.RData')
 
 ### 4
 Beta_sim_n1000_eps_0001 <- lapply(m, simulation_function, sim_size = simulation_size, n=1000 , func='beta', eps = 0.001)
-beta_n1000_eps_0001 <-as.data.frame(do.call(rbind, Beta_sim_n100_eps_1 ) , row.names = m )
+beta_n1000_eps_0001 <-as.data.frame(do.call(rbind, Beta_sim_n1000_eps_0001 ) , row.names = m )
 colnames(beta_n1000_eps_0001)  <- labels
-save(df_n1000_eps_0001, file='beta_n1000_eps_0001.RData')
+save(beta_n1000_eps_0001, file='beta_n1000_eps_0001.RData')
 
 
 ####### Mixture Beta
 
 ### 1
-Mixture_sim_n100_eps_1 <- lapply(m, simulation_function, sim_size = simulation_size, n=100 , func='mixture', eps = .1)
-mixture_n100_eps_1 <- as.data.frame(do.call(rbind, Mixture_sim_n100_eps_1 ) , row.names = m )
-colnames(mixture_n100_eps_1)  <- labels
-save(mixture_n100_eps_1, file='mixture_n100_eps_01.RData')
+Mixture_sim_n100_eps_01 <- lapply(m, simulation_function, sim_size = simulation_size, n=100 , func='mixture', eps = .1)
+mixture_n100_eps_1 <- as.data.frame(do.call(rbind, Mixture_sim_n100_eps_01 ) , row.names = m )
+colnames(mixture_n100_eps_01)  <- labels
+save(mixture_n100_eps_01, file='mixture_n100_eps_01.RData')
 
 
 ### 2
@@ -150,16 +150,16 @@ colnames(mixture_n100_eps_0001)  <- labels
 save(mixture_n100_eps_0001, file='mixture_n100_eps_0001.RData')
 
 ### 3
-Mixture_sim_n1000_eps_1 <- lapply(m, simulation_function, sim_size = simulation_size, n=1000 , func='mixture', eps = .1)
-mixture_n1000_eps_1 <-as.data.frame(do.call(rbind, Mixture_sim_n1000_eps_1 ) , row.names = m )
-colnames(mixture_n1000_eps_1)  <- labels
-save(df_n1000_eps_1, file='mixture_n1000_eps_01.RData')
+Mixture_sim_n1000_eps_01 <- lapply(m, simulation_function, sim_size = simulation_size, n=1000 , func='mixture', eps = .1)
+mixture_n1000_eps_1 <-as.data.frame(do.call(rbind, Mixture_sim_n1000_eps_01 ) , row.names = m )
+colnames(mixture_n1000_eps_01)  <- labels
+save(mixture_n1000_eps_01, file='mixture_n1000_eps_01.RData')
 
 ### 4
 Mixture_sim_n1000_eps_0001 <- lapply(m, simulation_function, sim_size = simulation_size, n=1000 , func='mixture', eps = 0.001)
-mixture_n1000_eps_0001 <- as.data.frame(do.call(rbind, Mixture_sim_n100_eps_1 ) , row.names = m )
+mixture_n1000_eps_0001 <- as.data.frame(do.call(rbind, Mixture_sim_n1000_eps_0001 ) , row.names = m )
 colnames(mixture_n1000_eps_0001)  <- labels
-save(df_n1000_eps_0001, file='mixture_n1000_eps_0001.RData')
+save(mixture_n1000_eps_0001, file='mixture_n1000_eps_0001.RData')
 
 
 
