@@ -115,6 +115,22 @@ Beta_sim_n1000_eps_1 <- lapply(m, simulation_function, sim_size = simulation_siz
 Beta_sim_n1000_eps_0001 <- lapply(m, simulation_function, sim_size = simulation_size, n=1000 , func='beta', eps = 0.001)
 
 
+
+
+Mixture_sim_n100_eps_1 <- lapply(m, simulation_function, sim_size = simulation_size, n=100 , func='mixture', eps = .1)
+
+
+Mixture_sim_n100_eps_0001 <- lapply(m, simulation_function, sim_size = simulation_size, n=100 , func='mixture', eps = 0.001)
+
+Mixture_sim_n1000_eps_1 <- lapply(m, simulation_function, sim_size = simulation_size, n=1000 , func='mixture', eps = .1)
+
+
+Mixture_sim_n1000_eps_0001 <- lapply(m, simulation_function, sim_size = simulation_size, n=1000 , func='mixture', eps = 0.001)
+
+
+
+
+
 ##### Saving into dataset  #####
 labels <- c("p_hat" , "q_hat")
 

@@ -35,10 +35,23 @@ for(i in 1:4){
   q_hat <- d$q_hat
   
   plot(5:(length(p_hat)+4), p_hat, ylab='MISE', xlab='', sub = bquote(epsilon == .(eps[i])), type='l', lwd=3, col=colors[1], ylim=c(0,y_lim), main = paste('n = ', enne[i]))
+  grid()
   mtext(text = 'm',side = 1, line = 2, cex=.8)
   points(5:(length(q_hat)+4), q_hat, type='l', lwd=3, col=colors[2])
 }
 
 
+par(mfrow = c(1,1))
+plot(1,1)
 
+legend("topright",legend = c(expression(paste("MISE of ",hat(p))),
+                             expression(paste("MISE of " , hat(q)))) ,
+                            col = c("#2297E6" , "#DF536B") , lty = 1,
+                            merge =TRUE, bg = "lightgray", lwd = 3)
+
+
+
+
+
+legend("topright", c(expression(hat(p)), expression(hat(q))  ) , pch=2, title= "topright, inset = .02",inset = .02)
 
