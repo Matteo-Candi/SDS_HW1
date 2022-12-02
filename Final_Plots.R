@@ -4,7 +4,6 @@ par(mfrow=c(2,2), font.main=1)
 
 colors <- c("#2297E6", "#DF536B", 'green')
 y_lim <- 6
-labels <- c("p_hat" , "q_hat")
 eps <- c(.1, .001, .1, .001)
 enne <- c(100, 100, 1000, 1000)
 
@@ -15,6 +14,7 @@ enne <- c(100, 100, 1000, 1000)
 data <- c('beta_n100_eps_01', 'beta_n100_eps_0001', 'beta_n1000_eps_01', 'beta_n1000_eps_0001')
 
 for(i in 1:4){
+  load(paste0('simulation_data/',data[i],'.RData'))
   d <- eval(parse(text = data[i]))
   p_hat <- d$p_hat
   q_hat <- d$q_hat
@@ -27,8 +27,11 @@ for(i in 1:4){
   points(5:(length(pq)+4), pq, type='l', lwd=3, col=colors[3])
 }
 
+
+data <- c('mixture_n100_eps_01', 'mixture_n100_eps_0001', 'mixture_n1000_eps_01', 'mixture_n1000_eps_0001')
 
 for(i in 1:4){
+  load(paste0('simulation_data/',data[i],'.RData'))
   d <- eval(parse(text = data[i]))
   p_hat <- d$p_hat
   q_hat <- d$q_hat
@@ -40,3 +43,4 @@ for(i in 1:4){
   points(5:(length(q_hat)+4), q_hat, type='l', lwd=3, col=colors[2])
   points(5:(length(pq)+4), pq, type='l', lwd=3, col=colors[3])
 }
+
