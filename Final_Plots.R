@@ -1,57 +1,42 @@
+rm(list=ls()) 
+
 par(mfrow=c(2,2), font.main=1)
 
-colors <- c("#2297E6", "#DF536B" )
-y_lim <- 12
+colors <- c("#2297E6", "#DF536B", 'green')
+y_lim <- 6
 labels <- c("p_hat" , "q_hat")
 eps <- c(.1, .001, .1, .001)
 enne <- c(100, 100, 1000, 1000)
+
+
 
 
 ### Beta Plot
 data <- c('beta_n100_eps_01', 'beta_n100_eps_0001', 'beta_n1000_eps_01', 'beta_n1000_eps_0001')
 
 for(i in 1:4){
-  load(paste0('simulation_data/', data[i], '.RData'))
   d <- eval(parse(text = data[i]))
   p_hat <- d$p_hat
   q_hat <- d$q_hat
+  pq <- d$pq
   
   plot(5:(length(p_hat)+4), p_hat, ylab='MISE', xlab='', sub = bquote(epsilon == .(eps[i])), type='l', lwd=3, col=colors[1], ylim=c(0,y_lim), main = paste('n = ', enne[i]))
   grid()
   mtext(text = 'm',side = 1, line = 2, cex=.8)
   points(5:(length(q_hat)+4), q_hat, type='l', lwd=3, col=colors[2])
+  points(5:(length(pq)+4), pq, type='l', lwd=3, col=colors[3])
 }
 
-
-
-
-### Mixture Beta Plot
-data <- c('mixture_n100_eps_01', 'mixture_n100_eps_0001', 'mixture_n1000_eps_01', 'mixture_n1000_eps_0001')
 
 for(i in 1:4){
-  load(paste0('simulation_data/', data[i], '.RData'))
   d <- eval(parse(text = data[i]))
   p_hat <- d$p_hat
   q_hat <- d$q_hat
+  pq <- d$pq
   
   plot(5:(length(p_hat)+4), p_hat, ylab='MISE', xlab='', sub = bquote(epsilon == .(eps[i])), type='l', lwd=3, col=colors[1], ylim=c(0,y_lim), main = paste('n = ', enne[i]))
   grid()
   mtext(text = 'm',side = 1, line = 2, cex=.8)
   points(5:(length(q_hat)+4), q_hat, type='l', lwd=3, col=colors[2])
+  points(5:(length(pq)+4), pq, type='l', lwd=3, col=colors[3])
 }
-
-
-par(mfrow = c(1,1))
-plot(1,1)
-
-legend("topright",legend = c(expression(paste("MISE of ",hat(p))),
-                             expression(paste("MISE of " , hat(q)))) ,
-                            col = c("#2297E6" , "#DF536B") , lty = 1,
-                            merge =TRUE, bg = "lightgray", lwd = 3)
-
-
-
-
-
-legend("topright", c(expression(hat(p)), expression(hat(q))  ) , pch=2, title= "topright, inset = .02",inset = .02)
-
