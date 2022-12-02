@@ -95,14 +95,14 @@ par(mfrow= c(2,2))
 i <- 1
 for (x in eps_vec){
   dataset <- privatized_engine(data = fitness$norm , eps = x)
-  summary_stats_m[i,] <- summary(dataset$privatized_times) 
+  summary_stats_eps[i,] <- summary(dataset$privatized_times) 
   
   hist(dataset$privatized_times, main = paste(" privatized dataset \n with eps set to: " , x ) , xlab = 'times per month' , freq = F , col = "cyan4")
   box()
   i <- i + 1
 }
 summary(fitness$Frequences_per_mounth)
-summary_stats_m
+summary_stats_eps
 #####
 
 
@@ -114,7 +114,7 @@ par(mfrow= c(2,2))
 i <- 1
 for (x in k_vec){
   dataset <- privatized_engine(data = fitness$norm[1:x])
-  summary_stats_m[i,] <- summary(dataset$privatized_times) 
+  summary_stats_k[i,] <- summary(dataset$privatized_times) 
   
   hist(dataset$privatized_times, main = paste(" privatized dataset \n with k set to: " , x ) , xlab = 'times per month' , freq = F , col = "cyan4")
   box()
@@ -123,67 +123,6 @@ for (x in k_vec){
 
 
 summary(fitness$Frequences_per_mounth)
-summary_stats_m
+summary_stats_k
 #####
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-eps_1 <- privatized_engine(eps = .1)
-
-
-summary(eps_1$privatized_times_norm)
-hist(eps_1$privatized_times_norm)
- 
-
-
-
-
-
-
-private_dat <- data.frame(Z)
-private_dat$index <- seq(from = 1 , to = n -1 , 1) 
-
-colnames(private_dat) <- c("privatized_times_norm" , "index")
-private_dat
-
-# De-normalize the data
-
-
-
-private_dat$privatized_times <- private_dat$privatized_times_norm * maximum
-
-
-private_dat$privatized_times
-
-hist(private_dat$privatized_times, 
-     col = "turquoise" , border = "white",
-     main = "Privatized data" , xlab = "Work_out times")
-box()
-
-
-boxplot(private_dat$privatized_times , col = "cyan4",
-        main = " Privatized Boxplot of times work-out" ,
-        code = 3, length = .1)
-
-summary(fitness$Frequences_per_mounth)
-summary(private_dat$privatized_times)
-
-
-
-
-
-
-
 
