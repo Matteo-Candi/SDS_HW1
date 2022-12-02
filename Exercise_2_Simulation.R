@@ -53,7 +53,7 @@ simulation_function <- function(m , sim_size = 100, n=100, h = 1/m , eps = .1, f
     integral_p <- c()       # Pre-allocate the vector of the integral
     integral_q <- c()       # Pre-allocate the vector of the integral
     
-    X <- sample_distr(n)   # Generating the random sample from the beta
+    X <- sample_distr(n)    # Generating the random sample from the beta
     
     bins <- seq(0, 1, h)    # Set the bins
     
@@ -147,12 +147,146 @@ colnames(df_n100_eps_1)  <- labels
 ### 4
 df_n1000_eps_0001 <-  as.data.frame(do.call(rbind, Beta_sim_n100_eps_1 ) , row.names = m )
 colnames(df_n100_eps_1)  <- labels
-#####
+##### Build Private Dataset
 
 save(df_n100_eps_1, file='df_n100_eps_1.RData')
 save(df_n100_eps_0001, file='df_n100_eps_0001.RData')
 save(df_n1000_eps_1, file='df_n1000_eps_1.RData')
 save(df_n1000_eps_0001, file='df_n1000_eps_0001.RData')
+
+
+
+
+
+
+library(readr)
+
+Fitness<- read_csv("Fitness_question.csv")
+
+
+colnames(Fitness) <- c("index" , "times")
+Fitness$index <- seq(1, nrow(Fitness) , 1)
+
+
+hist(Fitness$times , col = "steelblue",
+     main = "Work-out times per month",
+     freq = F , border = "white" ,
+     xlab = "Number of times" ,
+     breaks = 20)
+box()
+
+
+boxplot(Fitness$times , col = "purple3" ,
+        boxwex = .5 , main = " Times work-out ",
+        ylab = "Frequency", lex.order= T)
+
+summary(Fitness$times)
+
+
+
+#####Normalize the data######
+low <- min(Fitness$times)
+high <- max(Fitness$times)
+n <- nrow(Fitness)
+
+
+Fitness$Norm_times <- round(( Fitness$times - low ) / high , 2 )
+
+Fitness$Norm_times
+
+m <- 20
+h <- 1/m
+
+bins <- seq(0, 1, h)    # Set the bins
+
+
+
+intervals <- cut(Fitness$Norm_times , bins, include.lowest = T)  # Rename units with the bins they belong
+intervals
+
+
+pj_hat <- table(intervals) / n              # Finding the frequencies of units inside each bins
+
+
+p_hat <- as.vector(pj_hat / h) 
+
+
+plot(p_hat, type='n', xlim=c(0,1), ylim = c(0,8))
+colors = c("red" ,"blue")  
+
+for(x in 1:(length(bins)-1)){
+  print(x)
+  segments(bins[x],p_hat[x], bins[x+1],p_hat[x] , col = colors[1])
+  segments(bins[x], 0 , bins[x] , p_hat[x] , col = colors[1]) 
+  segments(bins[x+1], 0 , bins[x+1] , p_hat[x] , col = colors[1]) 
+  segments(0,0,1,0)
+}
+
+
+
+eps <- 0.001 
+m <- 20
+nu <- rlaplace(m, 0, 2/eps) # Generating m values from a Laplacian: one for each bin
+
+
+Dj <- table(intervals) + nu                 # Adding nu to every absolute frequencies of each bin
+
+
+
+
+Dj[Dj < 0] = 0    # Set all the nagative values to 0 t                      
+qj_hat = Dj
+
+# Finding qj_hat dividing max(0, Dj) for the sum of Dj
+if (sum(qj_hat) != 0){
+  qj_hat <- qj_hat / sum(qj_hat)} else {qj_hat <- rep(0, length(qj_hat))}
+
+
+q_hat <- round(qj_hat / h , 2)     
+
+
+for(x in 1:(length(bins)-1)){
+  print(x)
+  segments(bins[x],q_hat[x], bins[x+1],q_hat[x] , col = colors[2])
+  segments(bins[x], 0 , bins[x] , q_hat[x] , col = colors[2]) 
+  segments(bins[x+1], 0 , bins[x+1] , q_hat[x], col = colors[2] ) 
+  segments(0,0,1,0)
+}
+
+
+xx = c(0.3 , 0.9)
+p_hat_func <- function(x , bins , p_hat ){
+  interval <- cut(x, bins, include.lowest = T)
+
+  return(p_hat[interval])
+}
+
+xx= seq(0,1, length.out = n)
+
+hist(p_hat_func(xx, bins, p_hat))
+
+hist(Fitness$Norm_times)
+
+?ecdf
+
+
+r_p_hat <- function(n){
+  xx <- runif(n)
+  l <- qemp(p_hat_func(xx , bins , p_hat))
+  return(l)
+}
+r_p_hat
+
+
+
+
+# We use q_hat to return a privatized dataset
+
+
+
+
+
+
 
 
 
