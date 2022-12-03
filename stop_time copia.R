@@ -34,7 +34,7 @@ stopping_time <- function(M){
     }
     t_data[m] <- t
   } 
-  return(Sys.time() - beg)
+  return(difftime(Sys.time(), beg, units = "secs"))
 }
 
 
