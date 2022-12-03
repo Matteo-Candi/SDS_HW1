@@ -22,7 +22,7 @@ minimun <-  min(fitness$Frequences_per_mounth)
 fitness$norm <-  round(( fitness$Frequences_per_mounth -  minimun ) / (maximum - minimun) , 2)
 ##### Build the privatized function #####
 privatized_engine <- function(
-    data = fitness$norm, m = 15 , h = 1 / m , eps = 0.1  )
+    data = fitness$norm, m = 20 , h = 1 / m , eps = 0.1  )
   {
   n = length(data)        # Number of the observations
   bins <-  seq(0,1,h)     # Number of bins

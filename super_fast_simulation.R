@@ -190,3 +190,11 @@ save(mixture_n1000_eps_0001, file='simulation_data/mixture_n1000_eps_0001.RData'
 
 stopCluster(cl)
 
+
+qnorm(.95)
+
+
+vec <-  c(160, 168 , 173, 175, 180, 171, 175, 169, 167, 172, 185)
+
+
+pnorm(178.25 , 180, 5)¸

@@ -81,6 +81,13 @@ for (j in 1:M){
 
 
 save( diff , file='Computational_analysis')
+
+
+
+load("Computational_analysis")
+
+
+
 par(mfrow = c( 1, 1))
 plot(diff[1,] , ylim  = c( -.09 , .09),
      type = "l" , main = "Series of the errors" , 
