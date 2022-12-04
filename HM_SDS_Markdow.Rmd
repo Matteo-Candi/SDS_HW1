@@ -25,7 +25,11 @@ to understand the distribution of T.
 
 #### 1)
 
+<<<<<<< HEAD
 The idea is the following: We generate m $Unif(0,1)$ and then use them
+=======
+The idea is the following : We generate m $Unif(0,1)$ and then use them
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 as parameters of the geometric distributions. $X ∼ Unif(0, 1)$ and the
 distribution of $Y | X = x$ is a geometric distribution .
 
@@ -54,6 +58,7 @@ paste("The median speed over M is : " , median(results))
 
 #### 2)
 
+<<<<<<< HEAD
 To simulate the actual process fastly, we first generate M $X$
 \~ $Unif(0,1)$ for each of them we generate 10 $Y$ \~ $Unif(0,1)$ and
 check if there is a y greater than x, in case not we repeat the process
@@ -63,6 +68,17 @@ following:
 Most of the time 10 simulations are enough to detect a y greater than the
 x ( explanations are shown below) . If 10 simulations are not enough
 probably the drawn x is big and such that we need to draw more Y.
+=======
+In oreder to simulate the actual process fastly, we first generate M $X$
+\~ $Unif(0,1)$ for each of them we generate 10 $Y$ \~ $Unif(0,1)$ and
+check if there is a y grater than x, in case not we repeat the process
+generating 4 times the lenght of Y. The idea of doing that is the
+following :
+
+Most of the time 10 simulations are enough to detect a y grater than the
+x ( exlpanation are shown below) . If 10 simulations are not enough
+probably the drawn x is big and such of that we need to draw more Y.
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 
 ```{r simualtion 2, eval=FALSE}
 # [TODO] Matteo  write the code
@@ -77,7 +93,11 @@ Sim <- c(100, 1000, 10000, 100000, 1000000, 10000000)  # vector of the size
 
 ```
 
+<<<<<<< HEAD
 Let's start the analysis with a fixed size M equal to 100000.
+=======
+Let's start the analysis with a fixed size M equal to 100000
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 
 ```{r Generating distribution }
 condition <- function(y_vec , t = 0 , val){
@@ -94,7 +114,11 @@ stopping_time <- function(M){
   t_data <- rep(NA , M)
   x <- runif(M)
   for (m in 1:M){
+<<<<<<< HEAD
     cond <- condition(runif(10) , val = x[m])
+=======
+    cond <- condition(runif(2) , val = x[m])
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
     t <- cond + 1
     if (cond != 0)
       while(cond %% 10 == 0){
@@ -109,6 +133,7 @@ stopping_time <- function(M){
 
 ```
 
+<<<<<<< HEAD
 First, we compare the simulation results with the true function:
 
 $$ Pr(T = t) = \frac{1}{t(t+1)}$$ for t $∈${1,2,3,...}
@@ -123,6 +148,22 @@ M <- 10000
 stop_time <- stopping_time(M) 
 p_hat <- proportions(table(stop_time))
 
+=======
+First we comparare the simulation results with true function:
+
+$$ Pr(T = t) = \frac{1}{t(t+1)}$$ for t $∈${1,2,3,...}
+
+```{r True distribution}
+
+
+pT <- function(t)  1/(t*(t+1))  # True Distribution
+t_seq <- 1:25      #Plot it zooming between t = 1 and t = 25
+M <- 10000
+
+stop_time <- stopping_time(M) 
+p_hat <- proportions(table(stop_time))
+
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 # Plot the true distribution
 plot(t_seq, pT(t_seq), 
      type = "h",
@@ -140,7 +181,11 @@ grid()
 
 ```
 
+<<<<<<< HEAD
 Let's see the series of averages.
+=======
+Let's see the the series of the averages.
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 
 ```{r Average }
 step_size <- 10    #set a step size
@@ -165,10 +210,17 @@ grid()}
 
 ## Computational Analysis:
 
+<<<<<<< HEAD
 In this section, we would quantitatively check how the simulation size
 impacts the approximation, to show that, we are going to
 compute the distances between the true distribution and the estimated
 distribution. For these analysis, we have used the geometric distribution,
+=======
+In this section we would quantitatively check how the simulation size
+impacts the approximation, in order to show that, we are going to
+compute the distances between the true distribution and the estimated
+distibution. For these analysis we have used the geometric distribution,
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 since returns the same result but computationally faster.
 
 ```{r simualtion analysis , eval = FALSE}
@@ -205,17 +257,27 @@ greatest difference can be seen from the passage from M = 100 to M =
 
 ## Statistical Analysis
 
+<<<<<<< HEAD
 In this section, we are supposed to be a Casino that wants to introduce this
 experiment in the available games. The player has to pay an amount of C
 euros to start this game and he wins as many euros as the waiting time.
 
 The question we are interested to answer is: What is the "fair" amount
 to play this game?
+=======
+In this section we supposed to be a Casino that wants to introduce this
+experiment in the available games. The player have to pay an amount of C
+euros to start this game and he win as many euros as the waiting time.
+
+The question we are interested to answer is: What is the "fair" amount
+in order to play this game?.
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 
 To answer the question, we need to compute the expected value of this
 random variable. The fair amount you pay to enter the game is the
 expected value of the random variable.
 
+<<<<<<< HEAD
 The mathematical result provides a solution you can afford to pay any
 amount of C euros to play because on average you expect to win infinite.
 
@@ -230,15 +292,36 @@ money to play this game. The intuitive refusal to invest large sums in
 the game is well supported by the simulation described in the following
 plot. By repeating the series 10,000 times, on average low winnings are
 obtained at the beginning (a few units). Subsequently, the average rises,
+=======
+The mathematical result provides as a solution you can afford to pay any
+amount C euros to play because on average you expect to win an infinite
+amount.
+
+In fact, repeating this experiment many time, it will have to happen
+(with very low probability) to win a lot, enough for paying all the
+expenses incurred before.
+
+In practice though, no reasonable person is willing to pay a lot of
+money to play this game. The intuitive refusal to invest large sums in
+the game is well supported by the simulation described in the following
+graph. By repeating the series 10,000 times, on average low winnings are
+obtained at the beginning (a few units). Subsequently the average rises,
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 corresponding to some lucky series, and then decreases slightly until
 the next lucky hit. The overall trend is undoubtedly growing, and will
 mathematically tend to infinity after an infinite series of plays but,
 in the 10,000 plays of the simulation, the average of the winnings has
 just reached the value of 10.
 
+<<<<<<< HEAD
 From the statistical point of view, no difficulties is reached from the
 the situation illustrated in the game. In other words, it is perfectly
 coherent to accept the opportunity of an infinite win, such as to
+=======
+From the statistical point of view, no difficulties came from the
+situation presented in the game. In other words, it is perfectly
+coherent to accept the possibility of an infinite win, such as to
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 balance any amount paid in the (infinite) times the win is
 insignificant.
 
@@ -246,20 +329,36 @@ insignificant.
 
 Ultimately, the decision to play or not to play this game must depend on
 each individual's risk, itself dependent on many parameters, such as
+<<<<<<< HEAD
 initial earnings or the amount you are willing to lose.
 
 If the earnings here are "on average" infinite, you must also have
 infinite budgets and play an infinite number of times to be eligible for
 certain earnings..
+=======
+initial revenue or the amount you are willing to lose.
+
+If the earnings here are "on average" infinite, you must also have
+infinite funds and play an infinite number of times to be eligible for
+certain earnings.
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 
 No casinos would introduce this game, having the risk of infinite loss.
 
 ### Comments and further analysis:
 
+<<<<<<< HEAD
 A possible solution is to force the game to finish with a maximum win of
 L after the L-th trials.
 
 Considering the fact of the greatest revenue fixed to L = 8 in the
+=======
+No casinos would introduce this game, having the risk of infinite loss.
+A possible solution is to force the game to finish with a maximum win of
+L after the L-th trials.
+
+Considering the fact of the maximum revenue fixed to L = 8 in the
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 simulation study it results that a "fair" amount to pay is :
 
 ```{r fixed amount}
@@ -300,7 +399,11 @@ print(data$Freq[data$stop_simulation_copy == 8])
 
 ### 2.1
 
+<<<<<<< HEAD
 In this section, we focus on the univariate case with dimensionality
+=======
+In this section we focus on the univariate case with dimensionality
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 $d = 1$ and we set up a simulation in order to compute the MISE: Mean
 Integrated Squared Error between the true model
 $p_{X}(·) ~ Beta(\alpha =10 ,\beta = 10)$ and the two approximation
@@ -368,8 +471,13 @@ simulation_function <-function(m , sim_size = 100, n=100, h = 1/m , eps = .1, fu
     
     
     pj_hat <- table(intervals) / n                 # Find the frequencies of units inside each bins
+<<<<<<< HEAD
     
     
+=======
+    
+    
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
     p_hat <- as.vector(pj_hat / h)                 # Compute high of each bin dividing the frequencies for the width of the bin
 
     nu <- rlaplace(m, 0, 2/eps)                    # Generate m values from a Laplacian distribution: one for each bin
@@ -412,6 +520,7 @@ simulation_function <-function(m , sim_size = 100, n=100, h = 1/m , eps = .1, fu
 ```
 
 We run the simulation with the parameters setted to :
+<<<<<<< HEAD
 
 -   $\epsilon = \{0.1,0.001\}$
 
@@ -425,6 +534,21 @@ plots are shown below:
 
 ```{r final plots}
 
+=======
+
+-   $\epsilon = \{0.1,0.001\}$
+
+-   $n = \{100,1000\}$
+
+-   $m = seq(from = 5 , to =50 , by =1)$
+
+-   $M = 100$
+
+plots are shown below:
+
+```{r final plots}
+
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 par(mfrow=c(2,2), font.main=1)
 
 colors <- c("#2297E6", "#DF536B", '#61D04F')
@@ -470,11 +594,19 @@ where we have setted the parameter as following :
 -   $\alpha_{2} = 12$
 
 -   $\beta_{2} = 6$
+<<<<<<< HEAD
 
 We define two function to determinate the density distribution of the
 mixture model and and in order to generate a sample of size from the
 model
 
+=======
+
+We define two function to determinate the density distribution of the
+mixture model and and in order to generate a sample of size from the
+model
+
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 ```{r  mixture distribution , eval = FALSE }
 ##### Mixture distribution of Beta ######
 dmixture <- function(x, shape_1 = 2 , shape_2 = 15 , shape_3 = 12 , shape_4 = 6 , pi = 0.6 ){
@@ -493,10 +625,18 @@ rmixture <- function(n, shape_1 = 2 , shape_2 = 15 , shape_3 = 12 , shape_4 = 6 
   return(sam)
 }
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 
 ```
 
+<<<<<<< HEAD
+```
+
+=======
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 ```{r  mixture plots  }
 par(mfrow=c(2,2), font.main=1)
 data <- c('mixture_n100_eps_01', 'mixture_n100_eps_0001', 'mixture_n1000_eps_01', 'mixture_n1000_eps_0001')
@@ -523,6 +663,7 @@ The MISE($p_{X} , \hat{p}_{n,m}$) results close to 0 since we are
 evaluating the differences between the true distribution and an
 estimated distribution built from a sample of the true model. Increasing
 the value of n from n = 100 to n = 1000 we can see that the MISE is a
+<<<<<<< HEAD
 the decreasing function of m, because by adding more bins the histogram will be
 an adequate representation of the true distribution.
 
@@ -533,12 +674,26 @@ the two models.
 
 
 
+=======
+decreasing function of m , because adding more bins the histogram is a
+good representation of the true distribution.
+
+In case of n = 100 the blue line increase with large m, because we have
+only 100 data to put inside 50 bins and may happen that a lot ob bins
+are empty or with few units inside: this implied a greater distance from
+the two models.
+
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 The MISE($p_{X} , \hat{q}_{\epsilon,m}$) is closer to the
 MISE($p_{X} , \hat{p}_{n,m}$) when we evaluated it with a bigger
 $\epsilon$. In the case of n = 100 the differences is not remarkable but
 increasing n to 1000 the two MISE are obviously more similar. It means
 that when $\epsilon$ is too big , results a not efficient privatization,
+<<<<<<< HEAD
 in the other hand, when $\epsilon$ too small we have a good privatization to
+=======
+in the other when $\epsilon$ too small we have a good privatization to
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 the detriment of huge difference between the two distribution.
 
 The MISE($\hat{p}_{n,m} , \hat{q}_{\epsilon,m}$) is a measure of the
@@ -558,6 +713,7 @@ that the model (i.e. Mixture we used ) has.
 
 ### 2.3
 
+<<<<<<< HEAD
 The goal of this task is to privatize a data set. We collect data by
 having university students fill out a form about the frequency of
 their monthly workouts during 2022/2023. We collect 100
@@ -565,6 +721,15 @@ observations in order to study the distribution and statistics of this
 feature that can be useful to understand physical health. Work-out
 are often uncomfortable topics and since that we will share a
 privatized data set built according to the perturbed histogram approach.
+=======
+The goal of this task is to privatized a data-set. We collect data by
+having university students fill out a form about the frequencies of
+their monthly work-out during the your 2022/2023. We collect 100
+observations in order to study the distribution and statistics of this
+feature that can be useful to understand the physical health. Work-out
+are often an uncomfortable topic and since that we will share a
+privatized data-set built according to the perturbed histogram approach.
+>>>>>>> 3fd73e50134adf471505cd3d08926cd897c5baba
 
 We set $\epsilon = 0.01$ in order to have a good trade-off of
 privatizing and low informational loss.
