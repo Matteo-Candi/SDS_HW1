@@ -8,5 +8,10 @@ The project is about data privatization, creating privatized histogram to share 
 * Paolo Barba
 * Matteo Candi
 
+### *Content*:
+
 
 * `Barba_Candy.html`: The html file of the project
+* `Barba_Candy.R` : The R dile of the project
+* `privatized_dataset.R` : R file for analysis of a privatized dataset
+* `fitness.csv`: csv file of the dataset we used
