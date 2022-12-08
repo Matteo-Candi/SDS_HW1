@@ -15,3 +15,4 @@ The project is about data privatization, creating privatized histogram to share 
 * `Barba_Candy.Rmd` : The R markdown file of the project.
 * `privatized_dataset.R` : R file for analysis of a privatized dataset.
 * `fitness.csv`: csv file of the dataset we used.
+* `simulation_data`: The Rdata for the simulation we have runned.
