@@ -7,3 +7,6 @@ The project is about data privatization, creating privatized histogram to share 
 ### *Authors*:
 * Paolo Barba
 * Matteo Candi
+
+
+* `Barba_Candy.html`: The html file of the project
